@@ -236,7 +236,7 @@ export function ImageGenPayModal({ isOpen, onClose, onSuccess, mode }: ImageGenP
                       onClick={() => setSelectedPackId(pack.id)}
                       className="pack-row pack-btn w-full relative flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-left"
                       style={{
-                        background: isSelected ? `rgba(${pack.id === "value" ? "59,130,246" : pack.id === "pro" ? "168,85,247" : "244,63,94"},0.1)` : "rgba(255,255,255,0.03)",
+                        background: isSelected ? `rgba(${pack.id === "value" ? "59,130,246" : pack.id === "pro" ? "168,85,247" : pack.id === "mega" ? "244,63,94" : "234,179,8"},0.1)` : "rgba(255,255,255,0.03)",
                         border: isSelected ? `1px solid ${pack.accent}60` : "1px solid rgba(255,255,255,0.07)",
                         boxShadow: isSelected ? `0 0 20px ${pack.glow}, inset 0 1px 0 rgba(255,255,255,0.04)` : "none",
                       }}
@@ -361,7 +361,7 @@ export function ImageGenPayModal({ isOpen, onClose, onSuccess, mode }: ImageGenP
                 style={{
                   background: loading
                     ? "rgba(107,114,128,0.3)"
-                    : `linear-gradient(135deg,${selectedPack.id === "value" ? "#1d4ed8,#3b82f6" : selectedPack.id === "pro" ? "#7c3aed,#a855f7" : "#be123c,#f43f5e"})`,
+                    : `linear-gradient(135deg,${selectedPack.id === "value" ? "#1d4ed8,#3b82f6" : selectedPack.id === "pro" ? "#7c3aed,#a855f7" : selectedPack.id === "mega" ? "#be123c,#f43f5e" : "#a16207,#ca8a04"})`,
                   boxShadow: loading ? "none" : `0 0 30px ${selectedPack.glow}, inset 0 1px 0 rgba(255,255,255,0.1)`,
                 }}
               >
