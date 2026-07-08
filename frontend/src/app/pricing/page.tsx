@@ -19,101 +19,101 @@ const PLANS: {
   features: string[];
   videoAccess?: boolean;
 }[] = [
-  {
-    id: "value", name: "Value Pack", tagline: "₹199 · ~$1.99",
-    price: 199, mrp: 599, discount: 67, credits: 1200, unitPrice: "",
-    accent: "#3b82f6", glow: "rgba(59,130,246,0.28)", border: "rgba(59,130,246,0.45)",
-    iconBg: "linear-gradient(135deg,#1e3a8a,#1d4ed8)",
-    icon: Star,
-    badge: null, available: true,
-    features: [
-      "1,200 AI Credits",
-      "Image generation",
-      "disabled:Influencer Training",
-      "disabled:Video generation",
-      "disabled:Workflow Canvas",
-      "disabled:Motion Control",
-      "disabled:Face Swap",
-      "disabled:Image Upscale",
-      "disabled:Video Upscale",
-      "Flux Z-image Turbo",
-      "disabled:Nano Banana 2",
-      "disabled:Kling Image O3",
-      "disabled:GPT Image 2",
-      "disabled:Seedream 4.5",
-      "disabled:Kling 2.6 Pro",
-      "disabled:Kling 3.0 Pro",
-      "disabled:4K SeedVR Upscale",
-      "disabled:4K Seedance 2.0",
-    ],
-  },
-  {
-    id: "pro", name: "Pro Pack", tagline: "₹399 · ~$3.99",
-    price: 399, mrp: 1199, discount: 67, credits: 3000, unitPrice: "",
-    accent: "#a855f7", glow: "rgba(168,85,247,0.3)", border: "rgba(168,85,247,0.55)",
-    iconBg: "linear-gradient(135deg,#4c1d95,#6d28d9)",
-    icon: Flame,
-    badge: "MOST POPULAR", available: true,
-    videoAccess: true,
-    features: [
-      "3,000 AI Credits",
-      "Influencer Training",
-      "Image generation",
-      "🎬 Limited video generation model",
-      "Workflow Canvas",
-      "disabled:Motion Control",
-      "Face Swap",
-      "Image Upscale",
-      "disabled:Video Upscale",
-    ],
-  },
-  {
-    id: "mega", name: "Mega Pack", tagline: "₹499 · ~$4.99",
-    price: 499, mrp: 1499, discount: 67, credits: 10000, unitPrice: "",
-    accent: "#f43f5e", glow: "rgba(244,63,94,0.28)", border: "rgba(244,63,94,0.45)",
-    iconBg: "linear-gradient(135deg,#881337,#be123c)",
-    icon: Layers,
-    badge: "BEST VALUE", available: true,
-    videoAccess: true,
-    features: [
-      "10,000 AI Credits",
-      "Ultra HD output",
-      "All art styles & models",
-      "Commercial use",
-      "Priority queue",
-      "🎬 Video Generation Access",
-    ],
-  },
-  {
-    id: "premium", name: "Premium Pack", tagline: "₹1999 · ~$19.99",
-    price: 1999, mrp: 5999, discount: 67, credits: 40000, unitPrice: "",
-    accent: "#eab308", glow: "rgba(234,179,8,0.3)", border: "rgba(234,179,8,0.55)",
-    iconBg: "linear-gradient(135deg,#a16207,#ca8a04)",
-    icon: Sparkles,
-    badge: "ULTIMATE", available: true,
-    videoAccess: true,
-    features: [
-      "Influencer Training",
-      "Image generation",
-      "🎬 Video generation",
-      "Workflow Canvas",
-      "Motion Control",
-      "Face Swap",
-      "Image Upscale",
-      "Video Upscale",
-      "Nano Banana 2",
-      "Z-image Turbo",
-      "Kling Image O3",
-      "GPT Image 2",
-      "Seedream 4.5",
-      "Kling 2.6 Pro",
-      "Kling 3.0 Pro",
-      "4K",
-      "SeedVR Upscale 4K",
-      "Seedance 2.0"
-    ],
-  },
-];
+    {
+      id: "value", name: "Value Pack", tagline: "₹199 · ~$1.99",
+      price: 199, mrp: 599, discount: 67, credits: 1200, unitPrice: "",
+      accent: "#3b82f6", glow: "rgba(59,130,246,0.28)", border: "rgba(59,130,246,0.45)",
+      iconBg: "linear-gradient(135deg,#1e3a8a,#1d4ed8)",
+      icon: Star,
+      badge: null, available: true,
+      features: [
+        "1,200 AI Credits",
+        "Image generation",
+        "disabled:Influencer Training",
+        "disabled:Video generation",
+        "disabled:Workflow Canvas",
+        "disabled:Motion Control",
+        "disabled:Face Swap",
+        "disabled:Image Upscale",
+        "disabled:Video Upscale",
+        "Flux Z-image Turbo",
+        "disabled:Nano Banana 2",
+        "disabled:Kling Image O3",
+        "disabled:GPT Image 2",
+        "disabled:Seedream 4.5",
+        "disabled:Kling 2.6 Pro",
+        "disabled:Kling 3.0 Pro",
+        "disabled:4K SeedVR Upscale",
+        "disabled:4K Seedance 2.0",
+      ],
+    },
+    {
+      id: "pro", name: "Pro Pack", tagline: "₹399 · ~$3.99",
+      price: 399, mrp: 1199, discount: 67, credits: 3000, unitPrice: "",
+      accent: "#a855f7", glow: "rgba(168,85,247,0.3)", border: "rgba(168,85,247,0.55)",
+      iconBg: "linear-gradient(135deg,#4c1d95,#6d28d9)",
+      icon: Flame,
+      badge: "MOST POPULAR", available: true,
+      videoAccess: true,
+      features: [
+        "3,000 AI Credits",
+        "Influencer Training",
+        "Image generation",
+        "🎬 Limited video generation model",
+        "Workflow Canvas",
+        "disabled:Motion Control",
+        "Face Swap",
+        "Image Upscale",
+        "disabled:Video Upscale",
+      ],
+    },
+    {
+      id: "mega", name: "Mega Pack", tagline: "₹499 · ~$4.99",
+      price: 499, mrp: 1499, discount: 67, credits: 10000, unitPrice: "",
+      accent: "#f43f5e", glow: "rgba(244,63,94,0.28)", border: "rgba(244,63,94,0.45)",
+      iconBg: "linear-gradient(135deg,#881337,#be123c)",
+      icon: Layers,
+      badge: "BEST VALUE", available: true,
+      videoAccess: true,
+      features: [
+        "10,000 AI Credits",
+        "Ultra HD output",
+        "All art styles & models",
+        "Commercial use",
+        "Priority queue",
+        "🎬 Video Generation Access",
+      ],
+    },
+    {
+      id: "premium", name: "Premium Pack", tagline: "₹1999 · ~$19.99",
+      price: 1999, mrp: 5999, discount: 67, credits: 40000, unitPrice: "",
+      accent: "#eab308", glow: "rgba(234,179,8,0.3)", border: "rgba(234,179,8,0.55)",
+      iconBg: "linear-gradient(135deg,#a16207,#ca8a04)",
+      icon: Sparkles,
+      badge: "ULTIMATE", available: true,
+      videoAccess: true,
+      features: [
+        "Influencer Training",
+        "Image generation",
+        "🎬 Video generation",
+        "Workflow Canvas",
+        "Motion Control",
+        "Face Swap",
+        "Image Upscale",
+        "Video Upscale",
+        "Nano Banana 2",
+        "Z-image Turbo",
+        "Kling Image O3",
+        "GPT Image 2",
+        "Seedream 4.5",
+        "Kling 2.6 Pro",
+        "Kling 3.0 Pro",
+        "4K",
+        "SeedVR Upscale 4K",
+        "Seedance 2.0"
+      ],
+    },
+  ];
 
 /* ─── animated counter ──────────────────────────────────────────────────── */
 function Counter({ value, prefix = "" }: { value: number; prefix?: string }) {
@@ -361,19 +361,19 @@ export default function PricingPage() {
                         style={{
                           background:
                             plan.id === "value" ? "rgba(59,130,246,0.2)"
-                            : plan.id === "mega" ? "rgba(244,63,94,0.2)"
-                            : plan.id === "premium" ? "rgba(234,179,8,0.2)"
-                            : "rgba(168,85,247,0.2)",
+                              : plan.id === "mega" ? "rgba(244,63,94,0.2)"
+                                : plan.id === "premium" ? "rgba(234,179,8,0.2)"
+                                  : "rgba(168,85,247,0.2)",
                           color:
                             plan.id === "value" ? "#93c5fd"
-                            : plan.id === "mega" ? "#fda4af"
-                            : plan.id === "premium" ? "#fef08a"
-                            : "#c084fc",
+                              : plan.id === "mega" ? "#fda4af"
+                                : plan.id === "premium" ? "#fef08a"
+                                  : "#c084fc",
                           border:
                             plan.id === "value" ? "1px solid rgba(59,130,246,0.35)"
-                            : plan.id === "mega" ? "1px solid rgba(244,63,94,0.35)"
-                            : plan.id === "premium" ? "1px solid rgba(234,179,8,0.35)"
-                            : "1px solid rgba(168,85,247,0.35)",
+                              : plan.id === "mega" ? "1px solid rgba(244,63,94,0.35)"
+                                : plan.id === "premium" ? "1px solid rgba(234,179,8,0.35)"
+                                  : "1px solid rgba(168,85,247,0.35)",
                         }}
                       >
                         {plan.badge}
@@ -440,9 +440,9 @@ export default function PricingPage() {
                         style={{
                           background:
                             plan.id === "value" ? "rgba(59,130,246,0.12)"
-                            : plan.id === "pro" ? "rgba(168,85,247,0.12)"
-                            : plan.id === "mega" ? "rgba(244,63,94,0.12)"
-                            : "rgba(234,179,8,0.12)",
+                              : plan.id === "pro" ? "rgba(168,85,247,0.12)"
+                                : plan.id === "mega" ? "rgba(244,63,94,0.12)"
+                                  : "rgba(234,179,8,0.12)",
                           color: plan.accent,
                         }}
                       >
@@ -459,7 +459,7 @@ export default function PricingPage() {
                       {plan.features.map((feat) => {
                         const isDisabled = feat.startsWith("disabled:");
                         const cleanFeat = feat.replace("disabled:", "").replace("🎬 ", "");
-                        
+
                         return (
                           <li key={feat} className={`flex items-center gap-3 ${isDisabled ? "opacity-50" : ""}`}>
                             <div
@@ -467,9 +467,9 @@ export default function PricingPage() {
                               style={{
                                 background: isDisabled ? "rgba(255,255,255,0.05)" : (
                                   plan.id === "value" ? "rgba(59,130,246,0.15)"
-                                  : plan.id === "pro" ? "rgba(168,85,247,0.15)"
-                                  : plan.id === "mega" ? "rgba(244,63,94,0.15)"
-                                  : "rgba(234,179,8,0.15)"
+                                    : plan.id === "pro" ? "rgba(168,85,247,0.15)"
+                                      : plan.id === "mega" ? "rgba(244,63,94,0.15)"
+                                        : "rgba(234,179,8,0.15)"
                                 ),
                               }}
                             >
@@ -495,9 +495,9 @@ export default function PricingPage() {
                       style={{
                         background:
                           plan.id === "value" ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
-                          : plan.id === "pro" ? "linear-gradient(135deg,#7c3aed,#a855f7)"
-                          : plan.id === "mega" ? "linear-gradient(135deg,#be123c,#f43f5e)"
-                          : "linear-gradient(135deg,#a16207,#ca8a04)",
+                            : plan.id === "pro" ? "linear-gradient(135deg,#7c3aed,#a855f7)"
+                              : plan.id === "mega" ? "linear-gradient(135deg,#be123c,#f43f5e)"
+                                : "linear-gradient(135deg,#a16207,#ca8a04)",
                         boxShadow: `0 0 25px ${plan.glow}`,
                       }}
                     >
@@ -532,10 +532,10 @@ export default function PricingPage() {
           </div>
 
           <div className={`mt-8 flex justify-center transition-all duration-700 delay-300 ${visible ? "opacity-100" : "opacity-0"}`}>
-             <p className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border shadow-lg" style={{ background: "rgba(16,185,129,0.08)", borderColor: "rgba(16,185,129,0.25)", color: "#34d399", boxShadow: "0 4px 20px rgba(16,185,129,0.05)" }}>
-               <span className="text-lg">💡</span>
-               <span><strong className="text-white tracking-wide">Note:</strong> There is no monthly limit. These credits will last until you use all of them.</span>
-             </p>
+            <p className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border shadow-lg" style={{ background: "rgba(16,185,129,0.08)", borderColor: "rgba(16,185,129,0.25)", color: "#34d399", boxShadow: "0 4px 20px rgba(16,185,129,0.05)" }}>
+              <span className="text-lg">💡</span>
+              <span><strong className="text-white tracking-wide">Note:</strong> There is no monthly limit. These credits will last until you use all of them.</span>
+            </p>
           </div>
 
           {/* ── How Credits Work ── */}

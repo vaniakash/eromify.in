@@ -160,6 +160,18 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4692600238249678"
           crossOrigin="anonymous"
         ></script>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLT8K1QBQM"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-KLT8K1QBQM');
+            `,
+          }}
+        />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         {/* Global structured data on every page */}

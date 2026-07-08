@@ -39,32 +39,25 @@ interface Pack {
 
 const PACKS: Pack[] = [
   {
-    id: "value", name: "Value Pack", tag: "₹199 · ~$1.99",
-    price: 199, credits: 1200, unitPrice: "",
+    id: "value", name: "Value", tag: "₹99 · ~$1.15",
+    price: 99, credits: 1200, unitPrice: "₹0.08/credit",
     accent: "#3b82f6", glow: "rgba(59,130,246,0.28)",
     iconBg: "linear-gradient(135deg,#1e3a8a,#1d4ed8)",
     icon: Star,
   },
   {
-    id: "pro", name: "Pro Pack", tag: "₹399 · ~$3.99",
-    price: 399, credits: 3000, unitPrice: "",
+    id: "pro", name: "Pro", tag: "₹199 · ~$2.30",
+    price: 199, credits: 3000, unitPrice: "₹0.07/credit",
     accent: "#a855f7", glow: "rgba(168,85,247,0.28)",
     iconBg: "linear-gradient(135deg,#4c1d95,#6d28d9)",
     icon: Flame, popular: true, videoAccess: true,
   },
   {
-    id: "mega", name: "Mega Pack", tag: "₹499 · ~$4.99",
-    price: 499, credits: 10000, unitPrice: "",
+    id: "mega", name: "Mega", tag: "₹499 · ~$5.80",
+    price: 499, credits: 10000, unitPrice: "₹0.05/credit",
     accent: "#f43f5e", glow: "rgba(244,63,94,0.25)",
     iconBg: "linear-gradient(135deg,#881337,#be123c)",
     icon: Layers, videoAccess: true,
-  },
-  {
-    id: "premium", name: "Premium Pack", tag: "₹1999 · ~$19.99",
-    price: 1999, credits: 40000, unitPrice: "",
-    accent: "#eab308", glow: "rgba(234,179,8,0.3)",
-    iconBg: "linear-gradient(135deg,#a16207,#ca8a04)",
-    icon: Sparkles, videoAccess: true,
   },
 ];
 
