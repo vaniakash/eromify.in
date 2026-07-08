@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Menu,
   User as UserIcon,
@@ -18,9 +18,22 @@ import { useRouter } from "next/navigation";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
   const { data: session, status } = useSession();
   const [credits, setCredits] = useState<number | null>(null);
   const router = useRouter();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const fetchCredits = useCallback(async () => {
     if (status !== "authenticated") return;
@@ -120,33 +133,50 @@ export function Navbar() {
                   {session.user.email?.split("@")[0]}
                 </span>
               </div>
-              <div className="relative group cursor-pointer">
-                {session.user.image ? (
-                  <Image
-                    src={session.user.image}
-                    alt="User"
-                    width={36}
-                    height={36}
-                    className="rounded-full border-2 border-slate-200 group-hover:border-[#1736cf] transition-colors"
-                  />
-                ) : (
-                  <div className="w-9 h-9 bg-[#1736cf]/10 text-[#1736cf] rounded-full flex items-center justify-center border-2 border-transparent group-hover:border-[#1736cf] transition-colors">
-                    <UserIcon className="h-4 w-4" />
+              <div className="relative cursor-pointer" ref={profileRef}>
+                {/* Avatar — click to toggle */}
+                <button
+                  onClick={() => setProfileOpen((prev) => !prev)}
+                  className="focus:outline-none"
+                  aria-label="Profile menu"
+                >
+                  {session.user.image ? (
+                    <Image
+                      src={session.user.image}
+                      alt="User"
+                      width={36}
+                      height={36}
+                      className={`rounded-full border-2 transition-colors ${
+                        profileOpen ? "border-[#1736cf]" : "border-slate-200 hover:border-[#1736cf]"
+                      }`}
+                    />
+                  ) : (
+                    <div className={`w-9 h-9 bg-[#1736cf]/10 text-[#1736cf] rounded-full flex items-center justify-center border-2 transition-colors ${
+                      profileOpen ? "border-[#1736cf]" : "border-transparent hover:border-[#1736cf]"
+                    }`}>
+                      <UserIcon className="h-4 w-4" />
+                    </div>
+                  )}
+                </button>
+
+                {/* Dropdown */}
+                {profileOpen && (
+                  <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-200 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                    {/* User info */}
+                    <div className="px-4 py-3 border-b border-slate-100">
+                      <p className="text-sm font-bold text-slate-900 truncate">{session.user.name}</p>
+                      <p className="text-xs text-slate-500 truncate">{session.user.email}</p>
+                    </div>
+                    {/* Sign Out */}
+                    <button
+                      onClick={() => { setProfileOpen(false); signOut(); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2.5 transition-colors font-medium"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </button>
                   </div>
                 )}
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 origin-top-right">
-                  <div className="px-4 py-2 border-b border-slate-100 sm:hidden">
-                    <p className="text-sm font-bold text-slate-900 truncate">{session.user.name}</p>
-                    <p className="text-xs text-slate-500 truncate">{session.user.email}</p>
-                  </div>
-                  <button
-                    onClick={() => signOut()}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Sign Out
-                  </button>
-                </div>
               </div>
             </div>
           ) : (
