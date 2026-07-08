@@ -5,18 +5,33 @@ import Image from 'next/image';
 import { LayoutTemplate, Search, Filter } from 'lucide-react';
 import { TemplateModal } from './TemplateModal';
 
+const CLOUDINARY = 'https://res.cloudinary.com/nxg2vmmu/image/upload/modie';
+
 const MOCK_TEMPLATES = [
-  { id: '1', src: '/avatar/sofia.webp', alt: 'Sofia Template 1', category: 'Female' },
-  // More templates will be added later
+  // ── Female Templates ──
+  { id: '1',  src: `${CLOUDINARY}/sofi.png`,   name: 'Emma Johnson',     category: 'Female' },
+  { id: '2',  src: `${CLOUDINARY}/alia.png`,   name: 'Sophia Martinez',  category: 'Female' },
+  { id: '3',  src: `${CLOUDINARY}/kira.png`,   name: 'Olivia Anderson',  category: 'Female' },
+  { id: '4',  src: `${CLOUDINARY}/llia.png`,   name: 'Isabella Rossi',   category: 'Female' },
+  { id: '5',  src: `${CLOUDINARY}/sia.png`,    name: 'Charlotte Wilson', category: 'Female' },
+  { id: '6',  src: `${CLOUDINARY}/ria.png`,    name: 'Amelia Brown',     category: 'Female' },
+  { id: '7',  src: `${CLOUDINARY}/nia.png`,    name: 'Mia Thompson',     category: 'Female' },
+  { id: '8',  src: `${CLOUDINARY}/kia.png`,    name: 'Ava Taylor',       category: 'Female' },
+  { id: '9',  src: `${CLOUDINARY}/gg.png`,     name: 'Emily Clark',      category: 'Female' },
+  { id: '10', src: `${CLOUDINARY}/sweedy.png`, name: 'Chloe Evans',      category: 'Female' },
+  { id: '11', src: `${CLOUDINARY}/sturm.png`,  name: 'Hannah Miller',    category: 'Female' },
+  // ── Male Template ──
+  { id: '12', src: `${CLOUDINARY}/akash.png`,  name: 'Arjun Sharma',     category: 'Male'   },
 ];
 
 export function TemplateGalleryClient() {
   const [selectedTemplate, setSelectedTemplate] = useState<typeof MOCK_TEMPLATES[0] | null>(null);
   const [filter, setFilter] = useState('All');
+  const [search, setSearch] = useState('');
 
-  const filteredTemplates = filter === 'All' 
-    ? MOCK_TEMPLATES 
-    : MOCK_TEMPLATES.filter(t => t.category === filter);
+  const filteredTemplates = MOCK_TEMPLATES
+    .filter(t => filter === 'All' || t.category === filter)
+    .filter(t => t.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="flex flex-col min-h-full bg-[#0a0a0f]">
@@ -41,6 +56,8 @@ export function TemplateGalleryClient() {
               <input 
                 type="text" 
                 placeholder="Search templates..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
                 className="pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all w-full md:w-64"
               />
             </div>
@@ -80,16 +97,29 @@ export function TemplateGalleryClient() {
             >
               <Image 
                 src={template.src}
-                alt={template.alt}
+                alt={template.name}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
                 sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+              {/* Category badge */}
+              <div className="absolute top-3 left-3">
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                  template.category === 'Male'
+                    ? 'bg-blue-500/80 text-white'
+                    : 'bg-pink-500/80 text-white'
+                }`}>
+                  {template.category}
+                </span>
+              </div>
+
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f]/95 via-[#0a0a0f]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
-              <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                <button className="w-full py-2 bg-white/20 backdrop-blur-md text-white font-bold text-sm rounded-lg hover:bg-white/30 transition-colors">
-                  Select
+              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                <p className="text-white font-bold text-sm mb-2 truncate">{template.name}</p>
+                <button className="w-full py-2 bg-violet-600 hover:bg-violet-500 backdrop-blur-md text-white font-bold text-sm rounded-lg transition-colors">
+                  Select Template
                 </button>
               </div>
             </div>
@@ -98,7 +128,7 @@ export function TemplateGalleryClient() {
         
         {filteredTemplates.length === 0 && (
           <div className="py-20 text-center">
-            <p className="text-slate-500 font-medium">No templates found for "{filter}"</p>
+            <p className="text-slate-500 font-medium">No templates found for &quot;{filter}&quot;</p>
           </div>
         )}
       </div>
