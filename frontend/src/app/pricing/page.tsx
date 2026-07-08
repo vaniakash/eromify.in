@@ -20,23 +20,36 @@ const PLANS: {
   videoAccess?: boolean;
 }[] = [
   {
-    id: "value", name: "Value Pack", tagline: "₹99 · ~$1.15",
-    price: 99, mrp: 299, discount: 67, credits: 1200, unitPrice: "",
+    id: "value", name: "Value Pack", tagline: "₹199 · ~$1.99",
+    price: 199, mrp: 599, discount: 67, credits: 1200, unitPrice: "",
     accent: "#3b82f6", glow: "rgba(59,130,246,0.28)", border: "rgba(59,130,246,0.45)",
     iconBg: "linear-gradient(135deg,#1e3a8a,#1d4ed8)",
     icon: Star,
     badge: null, available: true,
     features: [
       "1,200 AI Credits",
-      "HD quality output",
-      "All art styles & models",
-      "Commercial use",
-      "Credits never expire",
+      "Image generation",
+      "disabled:Influencer Training",
+      "disabled:Video generation",
+      "disabled:Workflow Canvas",
+      "disabled:Motion Control",
+      "disabled:Face Swap",
+      "disabled:Image Upscale",
+      "disabled:Video Upscale",
+      "Flux Z-image Turbo",
+      "disabled:Nano Banana 2",
+      "disabled:Kling Image O3",
+      "disabled:GPT Image 2",
+      "disabled:Seedream 4.5",
+      "disabled:Kling 2.6 Pro",
+      "disabled:Kling 3.0 Pro",
+      "disabled:4K SeedVR Upscale",
+      "disabled:4K Seedance 2.0",
     ],
   },
   {
-    id: "pro", name: "Pro Pack", tagline: "₹199 · ~$2.30",
-    price: 199, mrp: 599, discount: 67, credits: 3000, unitPrice: "",
+    id: "pro", name: "Pro Pack", tagline: "₹399 · ~$3.99",
+    price: 399, mrp: 1199, discount: 67, credits: 3000, unitPrice: "",
     accent: "#a855f7", glow: "rgba(168,85,247,0.3)", border: "rgba(168,85,247,0.55)",
     iconBg: "linear-gradient(135deg,#4c1d95,#6d28d9)",
     icon: Flame,
@@ -44,15 +57,18 @@ const PLANS: {
     videoAccess: true,
     features: [
       "3,000 AI Credits",
-      "HD + 4K quality output",
-      "All art styles & models",
-      "Commercial use",
-      "Priority queue",
-      "🎬 Video Generation Access",
+      "Influencer Training",
+      "Image generation",
+      "🎬 Limited video generation model",
+      "Workflow Canvas",
+      "disabled:Motion Control",
+      "Face Swap",
+      "Image Upscale",
+      "disabled:Video Upscale",
     ],
   },
   {
-    id: "mega", name: "Mega Pack", tagline: "₹499 · ~$5.80",
+    id: "mega", name: "Mega Pack", tagline: "₹499 · ~$4.99",
     price: 499, mrp: 1499, discount: 67, credits: 10000, unitPrice: "",
     accent: "#f43f5e", glow: "rgba(244,63,94,0.28)", border: "rgba(244,63,94,0.45)",
     iconBg: "linear-gradient(135deg,#881337,#be123c)",
@@ -66,6 +82,35 @@ const PLANS: {
       "Commercial use",
       "Priority queue",
       "🎬 Video Generation Access",
+    ],
+  },
+  {
+    id: "premium", name: "Premium Pack", tagline: "₹1999 · ~$19.99",
+    price: 1999, mrp: 5999, discount: 67, credits: 40000, unitPrice: "",
+    accent: "#eab308", glow: "rgba(234,179,8,0.3)", border: "rgba(234,179,8,0.55)",
+    iconBg: "linear-gradient(135deg,#a16207,#ca8a04)",
+    icon: Sparkles,
+    badge: "ULTIMATE", available: true,
+    videoAccess: true,
+    features: [
+      "Influencer Training",
+      "Image generation",
+      "🎬 Video generation",
+      "Workflow Canvas",
+      "Motion Control",
+      "Face Swap",
+      "Image Upscale",
+      "Video Upscale",
+      "Nano Banana 2",
+      "Z-image Turbo",
+      "Kling Image O3",
+      "GPT Image 2",
+      "Seedream 4.5",
+      "Kling 2.6 Pro",
+      "Kling 3.0 Pro",
+      "4K",
+      "SeedVR Upscale 4K",
+      "Seedance 2.0"
     ],
   },
 ];
@@ -188,6 +233,7 @@ export default function PricingPage() {
         .card-enter:nth-child(1){animation-delay:0.05s}
         .card-enter:nth-child(2){animation-delay:0.18s}
         .card-enter:nth-child(3){animation-delay:0.31s}
+        .card-enter:nth-child(4){animation-delay:0.44s}
         .plan-card{transition:transform 0.3s cubic-bezier(.22,1,.36,1),box-shadow 0.3s ease}
         .plan-card.available:hover{transform:translateY(-6px)}
         .shimmer-text{
@@ -284,7 +330,7 @@ export default function PricingPage() {
           </div>
 
           {/* ── Cards ── */}
-          <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch max-w-5xl mx-auto ${visible ? "" : "opacity-0"}`}>
+          <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch max-w-7xl mx-auto ${visible ? "" : "opacity-0"}`}>
             {PLANS.map((plan) => {
               const isLoading = loading === plan.id;
               return (
@@ -316,14 +362,17 @@ export default function PricingPage() {
                           background:
                             plan.id === "value" ? "rgba(59,130,246,0.2)"
                             : plan.id === "mega" ? "rgba(244,63,94,0.2)"
+                            : plan.id === "premium" ? "rgba(234,179,8,0.2)"
                             : "rgba(168,85,247,0.2)",
                           color:
                             plan.id === "value" ? "#93c5fd"
                             : plan.id === "mega" ? "#fda4af"
+                            : plan.id === "premium" ? "#fef08a"
                             : "#c084fc",
                           border:
                             plan.id === "value" ? "1px solid rgba(59,130,246,0.35)"
                             : plan.id === "mega" ? "1px solid rgba(244,63,94,0.35)"
+                            : plan.id === "premium" ? "1px solid rgba(234,179,8,0.35)"
                             : "1px solid rgba(168,85,247,0.35)",
                         }}
                       >
@@ -392,7 +441,8 @@ export default function PricingPage() {
                           background:
                             plan.id === "value" ? "rgba(59,130,246,0.12)"
                             : plan.id === "pro" ? "rgba(168,85,247,0.12)"
-                            : "rgba(244,63,94,0.12)",
+                            : plan.id === "mega" ? "rgba(244,63,94,0.12)"
+                            : "rgba(234,179,8,0.12)",
                           color: plan.accent,
                         }}
                       >
@@ -406,26 +456,35 @@ export default function PricingPage() {
 
                     {/* Features */}
                     <ul className="space-y-3 mb-8 flex-1">
-                      {plan.features.map((feat) => (
-                        <li key={feat} className="flex items-center gap-3">
-                          <div
-                            className="check-icon w-5 h-5 rounded-full flex items-center justify-center shrink-0"
-                            style={{
-                              background:
-                                plan.id === "value" ? "rgba(59,130,246,0.15)"
-                                : plan.id === "pro" ? "rgba(168,85,247,0.15)"
-                                : "rgba(244,63,94,0.15)",
-                            }}
-                          >
-                            {feat.startsWith("🎬") ? (
-                              <Video className="h-3 w-3" style={{ color: plan.accent }} />
-                            ) : (
-                              <Check className="h-3 w-3" style={{ color: plan.accent }} />
-                            )}
-                          </div>
-                          <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.75)" }}>{feat.replace("🎬 ", "")}</span>
-                        </li>
-                      ))}
+                      {plan.features.map((feat) => {
+                        const isDisabled = feat.startsWith("disabled:");
+                        const cleanFeat = feat.replace("disabled:", "").replace("🎬 ", "");
+                        
+                        return (
+                          <li key={feat} className={`flex items-center gap-3 ${isDisabled ? "opacity-50" : ""}`}>
+                            <div
+                              className="check-icon w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                              style={{
+                                background: isDisabled ? "rgba(255,255,255,0.05)" : (
+                                  plan.id === "value" ? "rgba(59,130,246,0.15)"
+                                  : plan.id === "pro" ? "rgba(168,85,247,0.15)"
+                                  : plan.id === "mega" ? "rgba(244,63,94,0.15)"
+                                  : "rgba(234,179,8,0.15)"
+                                ),
+                              }}
+                            >
+                              {isDisabled ? (
+                                <Lock className="h-3 w-3" style={{ color: "rgba(255,255,255,0.3)" }} />
+                              ) : feat.includes("🎬") ? (
+                                <Video className="h-3 w-3" style={{ color: plan.accent }} />
+                              ) : (
+                                <Check className="h-3 w-3" style={{ color: plan.accent }} />
+                              )}
+                            </div>
+                            <span className="text-sm font-medium" style={{ color: isDisabled ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.75)" }}>{cleanFeat}</span>
+                          </li>
+                        );
+                      })}
                     </ul>
 
                     {/* CTA */}
@@ -437,7 +496,8 @@ export default function PricingPage() {
                         background:
                           plan.id === "value" ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
                           : plan.id === "pro" ? "linear-gradient(135deg,#7c3aed,#a855f7)"
-                          : "linear-gradient(135deg,#be123c,#f43f5e)",
+                          : plan.id === "mega" ? "linear-gradient(135deg,#be123c,#f43f5e)"
+                          : "linear-gradient(135deg,#a16207,#ca8a04)",
                         boxShadow: `0 0 25px ${plan.glow}`,
                       }}
                     >
@@ -445,7 +505,7 @@ export default function PricingPage() {
                         <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Processing…</>
                       ) : (
                         <>
-                          {plan.id === "value" ? <Star className="h-4 w-4" /> : plan.id === "pro" ? <Crown className="h-4 w-4" /> : <Layers className="h-4 w-4" />}
+                          {plan.id === "value" ? <Star className="h-4 w-4" /> : plan.id === "pro" ? <Crown className="h-4 w-4" /> : plan.id === "mega" ? <Layers className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
                           Get {plan.name}
                         </>
                       )}
@@ -469,6 +529,13 @@ export default function PricingPage() {
                 <span className="text-xs font-semibold" style={{ color: "rgba(255,255,255,0.35)" }}>{label}</span>
               </div>
             ))}
+          </div>
+
+          <div className={`mt-8 flex justify-center transition-all duration-700 delay-300 ${visible ? "opacity-100" : "opacity-0"}`}>
+             <p className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border shadow-lg" style={{ background: "rgba(16,185,129,0.08)", borderColor: "rgba(16,185,129,0.25)", color: "#34d399", boxShadow: "0 4px 20px rgba(16,185,129,0.05)" }}>
+               <span className="text-lg">💡</span>
+               <span><strong className="text-white tracking-wide">Note:</strong> There is no monthly limit. These credits will last until you use all of them.</span>
+             </p>
           </div>
 
           {/* ── How Credits Work ── */}
@@ -516,9 +583,10 @@ export default function PricingPage() {
                 </div>
                 <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
                   {[
-                    { pack: "Value Pack ₹99", internal: "1,200 credits", images: "12 images", videos: "—", color: "#60a5fa" },
-                    { pack: "Pro Pack ₹199", internal: "3,000 credits", images: "30 images", videos: "2 videos", color: "#c084fc" },
+                    { pack: "Value Pack ₹199", internal: "1,200 credits", images: "12 images", videos: "—", color: "#60a5fa" },
+                    { pack: "Pro Pack ₹399", internal: "3,000 credits", images: "30 images", videos: "2 videos", color: "#c084fc" },
                     { pack: "Mega Pack ₹499", internal: "10,000 credits", images: "100 images", videos: "6 videos", color: "#f87171" },
+                    { pack: "Premium Pack ₹1999", internal: "40,000 credits", images: "400 images", videos: "26 videos", color: "#facc15" },
                   ].map(({ pack, internal, images, videos, color }) => (
                     <div key={pack} className="px-6 py-4">
                       <div className="flex items-center justify-between mb-2">
@@ -560,7 +628,7 @@ export default function PricingPage() {
                 { q: "Do credits expire?", a: "Never. Once purchased, your credits stay on your account forever." },
                 { q: "Can I get a refund?", a: "Yes — 24-hour no-questions-asked refund policy. Contact support within 24 hours." },
                 { q: "What payment methods work?", a: "UPI, credit/debit cards, net banking, and all major wallets via Razorpay." },
-                { q: "Which plans include video generation?", a: "Pro Pack (₹199) and Mega Pack (₹499) include video generation access. Each video costs 1,500 credits." },
+                { q: "Which plans include video generation?", a: "Pro Pack (₹399), Mega Pack (₹499), and Premium Pack (₹1999) include video generation access. Each video costs 1,500 credits." },
               ].map(({ q, a }, i) => (
                 <details key={i} className="group rounded-2xl border overflow-hidden" style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(255,255,255,0.06)" }}>
                   <summary className="flex items-center justify-between px-6 py-4 text-sm font-bold text-white list-none cursor-pointer select-none hover:bg-white/[0.02] transition-colors">

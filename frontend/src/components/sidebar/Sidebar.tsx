@@ -60,6 +60,7 @@ const navItems = [
     href: "/avatar/templates",
     icon: LayoutTemplate,
     active: true,
+    isNew: true,
   },
   {
     label: "Gallery",
@@ -163,6 +164,18 @@ export function Sidebar({ mobile = false, onNavigate }: SidebarProps) {
                 )}
               />
               <span className="flex-1">{item.label}</span>
+              {(item as any).isNew && (
+                <span
+                  className="text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-wide animate-pulse shrink-0"
+                  style={{
+                    background: "rgba(16,185,129,0.15)",
+                    color: "#10b981",
+                    border: "1px solid rgba(16,185,129,0.4)",
+                  }}
+                >
+                  New
+                </span>
+              )}
             </Link>
           );
         })}
