@@ -41,7 +41,7 @@ export default function ASCIIBinaryCreator() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/auth/login?callbackUrl=" + encodeURIComponent(window.location.href));
+      router.push("/login?callbackUrl=" + encodeURIComponent(window.location.href));
     }
   }, [status, router]);
 

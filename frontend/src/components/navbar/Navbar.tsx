@@ -155,7 +155,7 @@ export function Navbar() {
               className="bg-[#1736cf] hover:bg-[#1430b8] text-white font-semibold shadow-sm cursor-pointer"
               size="sm"
             >
-              <Link href="/auth/login">
+              <Link href="/login">
                 Register
               </Link>
             </Button>

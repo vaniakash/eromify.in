@@ -139,7 +139,7 @@ export default function ImageGenClient() {
     if (!prompt.trim() || isGenerating) return;
 
     if (status !== "authenticated") {
-      window.location.href = "/auth/login";
+      window.location.href = "/login";
       return;
     }
 

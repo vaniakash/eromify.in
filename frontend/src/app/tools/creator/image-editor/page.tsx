@@ -207,7 +207,7 @@ export default function ImageEditorPage() {
     if (!referenceImage || !targetImage || isGenerating) return;
 
     if (status !== "authenticated") {
-      window.location.href = "/auth/login";
+      window.location.href = "/login";
       return;
     }
 

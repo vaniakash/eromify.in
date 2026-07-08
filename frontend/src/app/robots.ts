@@ -17,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
           '/api/user/',
           '/api/generate-image',
           '/admin/',
-          '/auth/login',
+          '/login',
         ],
       },
     ],

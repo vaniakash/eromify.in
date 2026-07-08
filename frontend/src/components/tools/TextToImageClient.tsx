@@ -162,7 +162,7 @@ export default function TextToImageClient() {
 
   const handleGenerate = async () => {
     if (!prompt.trim() || isGenerating) return;
-    if (status !== "authenticated") { window.location.href = "/auth/login"; return; }
+    if (status !== "authenticated") { window.location.href = "/login"; return; }
     if (credits !== null && credits <= 0) { setPayModal({ open: true, mode: "payment" }); return; }
     setIsGenerating(true);
     setError(null);

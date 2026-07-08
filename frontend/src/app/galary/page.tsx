@@ -70,7 +70,7 @@ export default function StudioPage() {
   // Redirect unauthenticated users
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.replace("/auth/login?callbackUrl=/studio");
+      router.replace("/login?callbackUrl=/studio");
     }
   }, [status, router]);
 

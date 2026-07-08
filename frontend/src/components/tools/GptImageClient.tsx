@@ -108,7 +108,7 @@ export default function GptImageClient() {
 
     // Auth guard — must be logged in
     if (status !== "authenticated") {
-      window.location.href = "/auth/login";
+      window.location.href = "/login";
       return;
     }
 
