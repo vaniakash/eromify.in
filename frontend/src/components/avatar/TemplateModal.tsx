@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface TemplateModalProps {
-  template: { id: string; src: string; alt: string; category: string } | null;
+  template: { id: string; src: string; name: string; category: string } | null;
   onClose: () => void;
 }
 
@@ -43,7 +43,7 @@ export function TemplateModal({ template, onClose }: TemplateModalProps) {
           <div className="relative w-full md:w-1/2 aspect-[4/5] md:aspect-auto bg-[#151520]">
             <Image
               src={template.src}
-              alt={template.alt}
+              alt={template.name}
               fill
               className="object-cover"
               priority
