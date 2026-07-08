@@ -1,6 +1,7 @@
 {
   "name": "ai-video-backend",
   "version": "1.0.0",
+  "license": "MIT",
   "description": "Express backend for Eromify AI video generation — runs on Render (no timeout limits)",
   "main": "server.js",
   "type": "commonjs",
