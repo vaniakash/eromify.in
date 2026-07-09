@@ -29,22 +29,15 @@ const PLANS: {
       features: [
         "1,200 AI Credits",
         "Image generation",
-        "disabled:Influencer Training",
-        "disabled:Video generation",
-        "disabled:Workflow Canvas",
-        "disabled:Motion Control",
-        "disabled:Face Swap",
-        "disabled:Image Upscale",
-        "disabled:Video Upscale",
-        "Flux Z-image Turbo",
-        "disabled:Nano Banana 2",
-        "disabled:Kling Image O3",
-        "disabled:GPT Image 2",
-        "disabled:Seedream 4.5",
-        "disabled:Kling 2.6 Pro",
-        "disabled:Kling 3.0 Pro",
-        "disabled:4K SeedVR Upscale",
-        "disabled:4K Seedance 2.0",
+        "HD quality output",
+        "All art styles & models",
+        "Commercial use",
+        "Credits never expire",
+        "NanoBanana Pro",
+        "Wan 2.7 Image Pro",
+        "GPT Image 2",
+        "Seedream 4.5 Pro",
+        "Qwen Image Plus",
       ],
     },
     {
@@ -73,7 +66,7 @@ const PLANS: {
       accent: "#f43f5e", glow: "rgba(244,63,94,0.28)", border: "rgba(244,63,94,0.45)",
       iconBg: "linear-gradient(135deg,#881337,#be123c)",
       icon: Layers,
-      badge: "BEST VALUE", available: true,
+      badge: "MOST POPULAR", available: true,
       videoAccess: true,
       features: [
         "10,000 AI Credits",
@@ -82,6 +75,16 @@ const PLANS: {
         "Commercial use",
         "Priority queue",
         "🎬 Video Generation Access",
+        "Wan 2.6",
+        "Wan 2.2 Fast",
+        "LTX-2.3",
+        "Pruna P-Video",
+        "Nova Reel",
+        "Veo 3.1 Fast",
+        "Grok Video Pro",
+        "Seedance 2.0",
+        "Seedance Pro-Fast",
+        "Seedance Lite",
       ],
     },
     {
@@ -248,6 +251,14 @@ export default function PricingPage() {
         .badge-pop{animation:badge-pop 0.4s cubic-bezier(.34,1.56,.64,1) both}
         .float-orb{animation:float 6s ease-in-out infinite}
         .glow-ring{animation:pulse-ring 2.5s ease-out infinite}
+        @keyframes mega-pulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 0 0 1px rgba(244,63,94,0.45), 0 20px 60px rgba(244,63,94,0.28); }
+          50% { transform: scale(1.02); box-shadow: 0 0 0 2px rgba(244,63,94,0.7), 0 25px 70px rgba(244,63,94,0.4); }
+        }
+        .mega-special {
+          animation: mega-pulse 3s infinite ease-in-out;
+          z-index: 10;
+        }
         .spin-slow{animation:spin-slow 20s linear infinite}
         .check-icon{transition:transform 0.2s ease}
         .plan-card.available:hover .check-icon{transform:scale(1.15)}
@@ -330,13 +341,13 @@ export default function PricingPage() {
           </div>
 
           {/* ── Cards ── */}
-          <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch max-w-7xl mx-auto ${visible ? "" : "opacity-0"}`}>
+          <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start max-w-7xl mx-auto ${visible ? "" : "opacity-0"}`}>
             {PLANS.map((plan) => {
               const isLoading = loading === plan.id;
               return (
                 <div
                   key={plan.id}
-                  className={`card-enter plan-card ${plan.available ? "available" : ""} relative rounded-3xl flex flex-col overflow-hidden`}
+                  className={`card-enter plan-card ${plan.available ? "available" : ""} ${plan.id === "mega" ? "mega-special" : ""} relative rounded-3xl flex flex-col overflow-hidden`}
                   style={{
                     background: plan.available ? "linear-gradient(160deg,#0e0e20 0%,#131328 100%)" : "rgba(255,255,255,0.015)",
                     border: `1px solid ${plan.border}`,
