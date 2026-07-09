@@ -39,28 +39,28 @@ interface Pack {
 
 const PACKS: Pack[] = [
   {
-    id: "value", name: "Value", tag: "₹199 · ~$1.99",
+    id: "value", name: "Beginner", tag: "₹199 · ~$1.99",
     price: 199, credits: 1200, unitPrice: "",
     accent: "#3b82f6", glow: "rgba(59,130,246,0.28)",
     iconBg: "linear-gradient(135deg,#1e3a8a,#1d4ed8)",
     icon: Star,
   },
   {
-    id: "pro", name: "Pro", tag: "₹399 · ~$3.99",
+    id: "pro", name: "Creator", tag: "₹399 · ~$3.99",
     price: 399, credits: 3000, unitPrice: "",
     accent: "#a855f7", glow: "rgba(168,85,247,0.28)",
     iconBg: "linear-gradient(135deg,#4c1d95,#6d28d9)",
     icon: Flame, popular: true, videoAccess: true,
   },
   {
-    id: "mega", name: "Mega", tag: "₹499 · ~$4.99",
+    id: "mega", name: "Professional", tag: "₹499 · ~$4.99",
     price: 499, credits: 10000, unitPrice: "",
     accent: "#f43f5e", glow: "rgba(244,63,94,0.25)",
     iconBg: "linear-gradient(135deg,#881337,#be123c)",
     icon: Layers, videoAccess: true,
   },
   {
-    id: "premium", name: "Premium", tag: "₹1999 · ~$19.99",
+    id: "premium", name: "Enterprise", tag: "₹1999 · ~$19.99",
     price: 1999, credits: 40000, unitPrice: "",
     accent: "#eab308", glow: "rgba(234,179,8,0.28)",
     iconBg: "linear-gradient(135deg,#854d0e,#a16207)",
