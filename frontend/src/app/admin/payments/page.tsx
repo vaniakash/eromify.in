@@ -212,7 +212,7 @@ export default async function AdminPaymentsPage() {
                     <td style={{ fontSize: 10, color: "var(--text-muted)", fontFamily: "monospace" }}>
                       {p.razorpayPaymentId || p.razorpayOrderId?.slice(-12) || "—"}
                     </td>
-                    <td style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                    <td suppressHydrationWarning style={{ fontSize: 11, color: "var(--text-muted)" }}>
                       {p.createdAt ? formatDistanceToNow(new Date(p.createdAt), { addSuffix: true }) : "N/A"}
                     </td>
                   </tr>
@@ -272,7 +272,7 @@ export default async function AdminPaymentsPage() {
                     <td style={{ fontSize: 10, color: "var(--text-muted)", fontFamily: "monospace" }}>
                       {p.razorpayPaymentId || p.razorpayOrderId?.slice(-12) || "—"}
                     </td>
-                    <td style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                    <td suppressHydrationWarning style={{ fontSize: 11, color: "var(--text-muted)" }}>
                       {p.createdAt ? formatDistanceToNow(new Date(p.createdAt), { addSuffix: true }) : "N/A"}
                     </td>
                   </tr>

@@ -37,8 +37,7 @@ export function AdminSidebar() {
       {/* Logo */}
       <div className="sidebar-logo">
         <div className="sidebar-logo-badge">
-          <div className="sidebar-logo-icon">⚡</div>
-          <span className="sidebar-logo-text">Eromify</span>
+          <span className="sidebar-logo-text">CONSOLE</span>
         </div>
       </div>
 

@@ -6,15 +6,6 @@ export function AdminHeader() {
       {/* Left: Logo */}
       <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{
-            width: 32, height: 32,
-            borderRadius: 8,
-            background: "linear-gradient(135deg, var(--accent-cyan), var(--accent-violet))",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            color: "#fff", fontSize: 16, fontWeight: 900
-          }}>
-            ⚡
-          </div>
           <span style={{
             fontSize: 18,
             fontWeight: 800,
@@ -24,7 +15,7 @@ export function AdminHeader() {
             WebkitTextFillColor: "transparent",
             backgroundClip: "text"
           }}>
-            Eromify
+            CONSOLE
           </span>
         </div>
       </div>

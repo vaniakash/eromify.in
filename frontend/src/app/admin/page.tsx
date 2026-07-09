@@ -152,7 +152,7 @@ export default async function AdminDashboard() {
                         <span className="badge badge-free">Free</span>
                       )}
                     </td>
-                    <td style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                    <td suppressHydrationWarning style={{ fontSize: 11, color: "var(--text-muted)" }}>
                       {user.createdAt
                         ? formatDistanceToNow(new Date(user.createdAt), { addSuffix: true })
                         : "N/A"}
@@ -213,7 +213,7 @@ export default async function AdminDashboard() {
                   </div>
                   <div style={{ textAlign: "right" }}>
                     <div className="txn-amount">₹{(p.amount / 100).toLocaleString("en-IN")}</div>
-                    <div className="txn-time">
+                    <div suppressHydrationWarning className="txn-time">
                       {p.createdAt && formatDistanceToNow(new Date(p.createdAt), { addSuffix: true })}
                     </div>
                   </div>

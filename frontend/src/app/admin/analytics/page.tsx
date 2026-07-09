@@ -431,7 +431,7 @@ export default async function AnalyticsPage() {
                   }}>
                     {ev.event.replace("_", " ")}
                   </span>
-                  <span style={{ fontSize: 10, color: "var(--text-muted)", whiteSpace: "nowrap" }}>
+                  <span suppressHydrationWarning style={{ fontSize: 10, color: "var(--text-muted)", whiteSpace: "nowrap" }}>
                     {ev.createdAt ? formatDistanceToNow(new Date(ev.createdAt), { addSuffix: true }) : "—"}
                   </span>
                 </div>

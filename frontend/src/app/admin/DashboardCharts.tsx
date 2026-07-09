@@ -496,16 +496,16 @@ function Legend({ items }: { items: { label: string; color: string; value: strin
    Liquid Glass KPI Card (Apple WWDC 2025 Style)
 ───────────────────────────────────────────────────────────────────── */
 function LiquidKpiCard({ 
-  label, val, prefix, suffix, color, icon, sparklinePath, index 
+  label, subtitle, val, prefix, suffix, color, icon, sparklinePath, trend, trendValue, index 
 }: { 
-  label: string; val: number; prefix: string; suffix: string; color: string; icon: string; sparklinePath: string; index: number;
+  label: string; subtitle: string; val: number; prefix: string; suffix: string; color: string; icon: string; sparklinePath: string; trend: "up" | "down" | "neutral"; trendValue: string; index: number;
 }) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [drawn, setDrawn] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setTimeout(() => setDrawn(true), 200 + index * 100); }, [index]);
+  useEffect(() => { setTimeout(() => setDrawn(true), 150 + index * 100); }, [index]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current) return;
@@ -523,74 +523,103 @@ function LiquidKpiCard({
         position: "relative",
         overflow: "hidden",
         borderRadius: "20px",
-        padding: "16px",
+        padding: "20px 24px",
         cursor: "default",
-        transform: isHovered ? "translateY(-6px) scale(1.02)" : "translateY(0) scale(1)",
+        transform: isHovered ? "translateY(-4px)" : "translateY(0)",
         transition: "transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease, background 0.4s ease",
-        background: isHovered ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.02)",
+        background: isHovered ? "rgba(255, 255, 255, 0.04)" : "rgba(255, 255, 255, 0.02)",
         backdropFilter: "blur(24px) saturate(180%)",
         WebkitBackdropFilter: "blur(24px) saturate(180%)",
-        border: "1px solid rgba(255, 255, 255, 0.12)",
-        borderTop: "1px solid rgba(255, 255, 255, 0.25)",
+        border: "1px solid rgba(255, 255, 255, 0.08)",
+        borderTop: "1px solid rgba(255, 255, 255, 0.15)",
         boxShadow: isHovered 
-          ? `0 20px 40px -12px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.3), 0 0 24px ${color}33`
-          : `0 10px 20px -8px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.15)`,
+          ? `0 24px 48px -12px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.2), 0 0 32px ${color}15`
+          : `0 12px 24px -10px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1)`,
       }}
     >
-      {/* Specular Highlight tracking mouse */}
+      {/* Specular Highlight */}
       <div 
         style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: `radial-gradient(circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.15) 0%, transparent 60%)`,
+          background: `radial-gradient(circle 250px at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.1) 0%, transparent 100%)`,
           opacity: isHovered ? 1 : 0,
-          transition: "opacity 0.3s ease",
+          transition: "opacity 0.4s ease",
           pointerEvents: "none",
-          mixBlendMode: "overlay",
         }}
       />
-      {/* Iridescent Base Gradient */}
+      {/* Iridescent Glow */}
       <div 
         style={{
           position: "absolute", inset: 0,
-          background: `linear-gradient(135deg, ${color}1A 0%, transparent 50%, rgba(255,255,255,0.03) 100%)`,
+          background: `radial-gradient(circle at 100% 100%, ${color}1A 0%, transparent 60%)`,
           pointerEvents: "none"
         }}
       />
       
       {/* Content */}
       <div style={{ position: "relative", zIndex: 2 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-          <div style={{ 
-            width: 38, height: 38, 
-            borderRadius: "12px", 
-            background: `linear-gradient(135deg, ${color}33 0%, ${color}11 100%)`,
-            border: `1px solid ${color}44`,
-            borderTop: `1px solid ${color}88`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: `0 8px 16px ${color}22, inset 0 2px 4px rgba(255,255,255,0.2)`,
-            transform: isHovered ? "scale(1.05)" : "scale(1)",
-            transition: "transform 0.4s cubic-bezier(0.34,1.56,0.64,1)"
+        {/* Top Row: Title & Trend */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+              <span className="material-symbols-outlined" style={{ color, fontSize: 18, filter: `drop-shadow(0 0 4px ${color}88)` }}>
+                {icon}
+              </span>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-secondary)", margin: 0, letterSpacing: "0.2px" }}>
+                {label}
+              </h3>
+            </div>
+            <div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 500 }}>
+              {subtitle}
+            </div>
+          </div>
+          
+          <div style={{
+            padding: "4px 8px",
+            borderRadius: "8px",
+            background: trend === "up" ? "rgba(52,211,153,0.12)" : trend === "down" ? "rgba(244,114,182,0.12)" : "rgba(255,255,255,0.06)",
+            color: trend === "up" ? "#34d399" : trend === "down" ? "#f472b6" : "var(--text-muted)",
+            fontSize: 12,
+            fontWeight: 700,
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+            border: `1px solid ${trend === "up" ? "rgba(52,211,153,0.2)" : trend === "down" ? "rgba(244,114,182,0.2)" : "rgba(255,255,255,0.1)"}`
           }}>
-            <span className="material-symbols-outlined" style={{ 
-              color: color, fontSize: 20, filter: `drop-shadow(0 0 8px ${color})` 
-            }}>
-              {icon}
+            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
+              {trend === "up" ? "trending_up" : trend === "down" ? "trending_down" : "remove"}
             </span>
+            {trendValue}
+          </div>
+        </div>
+        
+        {/* Bottom Row: Metric & Sparkline */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+          <div style={{ 
+            fontSize: 34, 
+            fontWeight: 800, 
+            color: "#fff", 
+            letterSpacing: "-1px", 
+            lineHeight: 1,
+            textShadow: "0 4px 8px rgba(0,0,0,0.2)",
+            fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+          }}>
+            {prefix}{val.toLocaleString("en-IN")}{suffix}
           </div>
           
           {/* Animated Sparkline */}
-          <div style={{ width: 60, height: 26, marginTop: 4 }}>
+          <div style={{ width: 70, height: 30, paddingBottom: 2 }}>
              <svg width="100%" height="100%" viewBox="0 0 70 35" style={{ overflow: 'visible' }}>
                <defs>
                  <linearGradient id={`grad-${index}`} x1="0%" y1="0%" x2="0%" y2="100%">
-                   <stop offset="0%" stopColor={color} stopOpacity={0.6} />
+                   <stop offset="0%" stopColor={color} stopOpacity={0.4} />
                    <stop offset="100%" stopColor={color} stopOpacity={0} />
                  </linearGradient>
                </defs>
                <path 
                  d={`${sparklinePath} L70,35 L0,35 Z`} 
                  fill={`url(#grad-${index})`}
-                 style={{ opacity: drawn ? 1 : 0, transition: "opacity 1.5s ease 0.3s" }} 
+                 style={{ opacity: drawn ? 1 : 0, transition: "opacity 1.2s ease 0.2s" }} 
                />
                <path 
                  d={sparklinePath} 
@@ -600,7 +629,7 @@ function LiquidKpiCard({
                  strokeLinecap="round" 
                  strokeLinejoin="round" 
                  style={{ 
-                   filter: `drop-shadow(0 4px 6px ${color}66)`,
+                   filter: `drop-shadow(0 2px 4px ${color}66)`,
                    strokeDasharray: 120,
                    strokeDashoffset: drawn ? 0 : 120,
                    transition: "stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)"
@@ -614,23 +643,130 @@ function LiquidKpiCard({
                    filter: `drop-shadow(0 0 6px ${color})`,
                    transform: drawn ? "scale(1)" : "scale(0)",
                    transformOrigin: `70px ${sparklinePath.split(',').pop()?.split(' ')[0] || 10}px`,
-                   transition: "all 0.5s cubic-bezier(0.34,1.56,0.64,1) 1.2s" 
+                   transition: "all 0.5s cubic-bezier(0.34,1.56,0.64,1) 1s" 
                  }} 
                />
              </svg>
           </div>
         </div>
-        
-        <div style={{ 
-          fontSize: 26, fontWeight: 800, color: "#fff", 
-          letterSpacing: "-1px", 
-          lineHeight: 1,
-          textShadow: "0 6px 12px rgba(0,0,0,0.3)",
-          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-        }}>
-          {prefix}{val.toLocaleString("en-IN")}{suffix}
-        </div>
       </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Interactive Vertical Bar Chart (User Acquisition)
+───────────────────────────────────────────────────────────────────── */
+function BarChart({ data }: { data: DayPoint[] }) {
+  const [drawn, setDrawn] = useState(false);
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+
+  useEffect(() => { setTimeout(() => setDrawn(true), 300); }, []);
+
+  const H = 260; // Match RadarChart height
+  // Add some padding top for the tooltip so it doesn't get clipped
+  const paddingTop = 40;
+  const graphH = H - paddingTop - 30; // 30 for labels at bottom
+  
+  const maxCount = Math.max(...data.map(d => d.count), 4);
+
+  const fullDays: Record<string, string> = {
+    MON: "Monday", TUE: "Tuesday", WED: "Wednesday", THU: "Thursday", FRI: "Friday", SAT: "Saturday", SUN: "Sunday"
+  };
+
+  return (
+    <div style={{ position: "relative", width: "100%", height: H, display: "flex", justifyContent: "space-between", alignItems: "flex-end", padding: `0 10px` }}>
+      {/* Background Grid Lines (Horizontal) */}
+      <div style={{ position: "absolute", top: paddingTop, left: 10, right: 10, bottom: 30, display: "flex", flexDirection: "column", justifyContent: "space-between", pointerEvents: "none" }}>
+        {[0, 1, 2, 3].map(i => (
+          <div key={i} style={{ width: "100%", height: 1, borderTop: "1px dashed rgba(255,255,255,0.05)" }} />
+        ))}
+      </div>
+
+      {data.map((d, i) => {
+        const hPct = drawn ? Math.max((d.count / maxCount) * 100, 2) : 0; // min 2% height for 0 values so we see a bump
+        const isHovered = hoverIdx === i;
+        
+        // Tooltip top position based on bar height
+        const barHeightPx = (hPct / 100) * graphH;
+        
+        return (
+          <div 
+            key={i} 
+            style={{ 
+              position: "relative", 
+              height: "100%", 
+              flex: 1, 
+              display: "flex", 
+              flexDirection: "column", 
+              justifyContent: "flex-end", 
+              alignItems: "center",
+              zIndex: isHovered ? 10 : 1,
+              cursor: "crosshair"
+            }}
+            onMouseEnter={() => setHoverIdx(i)}
+            onMouseLeave={() => setHoverIdx(null)}
+          >
+            {/* Tooltip */}
+            {isHovered && (
+              <div style={{
+                position: "absolute",
+                bottom: barHeightPx + 40,
+                background: "var(--bg-elevated)",
+                border: "1px solid rgba(34,211,238,0.35)",
+                borderRadius: 8,
+                padding: "6px 12px",
+                pointerEvents: "none",
+                whiteSpace: "nowrap",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                opacity: 1,
+                transform: "translateY(0)",
+                transition: "opacity 0.2s ease, transform 0.2s ease"
+              }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(139,149,184,0.8)" }}>{fullDays[d.label] || d.label}</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: "#22d3ee", display: "flex", alignItems: "baseline", gap: 4 }}>
+                  {d.count} <span style={{fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.4)"}}>signups</span>
+                </div>
+              </div>
+            )}
+            
+            {/* Bar Wrapper for proper animation from bottom */}
+            <div style={{ height: graphH, width: "100%", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+              <div style={{ 
+                width: "100%", 
+                maxWidth: "32px",
+                height: `${hPct}%`,
+                background: isHovered 
+                  ? "linear-gradient(180deg, #22d3ee 0%, rgba(34,211,238,0.1) 100%)" 
+                  : "linear-gradient(180deg, rgba(34,211,238,0.5) 0%, rgba(34,211,238,0.05) 100%)",
+                borderRadius: "6px 6px 0 0",
+                boxShadow: isHovered ? "0 0 20px rgba(34,211,238,0.4), inset 0 2px 4px rgba(255,255,255,0.4)" : "none",
+                borderTop: isHovered ? "1px solid rgba(34,211,238,0.9)" : "1px solid rgba(34,211,238,0.2)",
+                borderLeft: isHovered ? "1px solid rgba(34,211,238,0.9)" : "1px solid rgba(34,211,238,0.2)",
+                borderRight: isHovered ? "1px solid rgba(34,211,238,0.9)" : "1px solid rgba(34,211,238,0.2)",
+                transition: "height 1.2s cubic-bezier(0.34,1.56,0.64,1), all 0.3s ease",
+              }} />
+            </div>
+            
+            {/* Label */}
+            <div style={{ 
+              height: 30,
+              display: "flex",
+              alignItems: "center",
+              fontSize: 11, 
+              fontWeight: isHovered ? 800 : 600,
+              color: isHovered ? "#22d3ee" : "rgba(139,149,184,0.6)",
+              transition: "all 0.2s ease",
+              textTransform: "uppercase"
+            }}>
+              {d.label.slice(0, 2)}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -671,21 +807,24 @@ export function DashboardCharts({
         style={{ perspective: "1000px" }}
       >
         {[
-          { label: "Total Users",    val: cUsers,   prefix: "",  suffix: "",  color: "#7c6cfe", icon: "group",             sparkline: sparklines[0] },
-          { label: "Pro Members",    val: cSubs,    prefix: "",  suffix: "",  color: "#22d3ee", icon: "workspace_premium", sparkline: sparklines[1] },
-          { label: "Total Revenue",  val: cRevenue, prefix: "₹", suffix: "",  color: "#34d399", icon: "payments",          sparkline: sparklines[2] },
-          { label: "This Month",     val: cMrr,     prefix: "₹", suffix: "",  color: "#fbbf24", icon: "trending_up",       sparkline: sparklines[3] },
+          { label: "Total Users",   subtitle: "All registered accounts", val: cUsers,   prefix: "",  suffix: "",  color: "#7c6cfe", icon: "group",             sparkline: sparklines[0], trend: "up" as const, trendValue: "+12%" },
+          { label: "Pro Members",   subtitle: "Active subscriptions",    val: cSubs,    prefix: "",  suffix: "",  color: "#22d3ee", icon: "workspace_premium", sparkline: sparklines[1], trend: "up" as const, trendValue: "+4%" },
+          { label: "Total Revenue", subtitle: "Lifetime net volume",     val: cRevenue, prefix: "₹", suffix: "",  color: "#34d399", icon: "payments",          sparkline: sparklines[2], trend: "up" as const, trendValue: "+18%" },
+          { label: "This Month",    subtitle: "Confirmed MRR",           val: cMrr,     prefix: "₹", suffix: "",  color: "#fbbf24", icon: "trending_up",       sparkline: sparklines[3], trend: "neutral" as const, trendValue: "0%" },
         ].map((k, i) => (
           <LiquidKpiCard 
             key={k.label} 
             index={i}
             label={k.label} 
+            subtitle={k.subtitle}
             val={k.val} 
             prefix={k.prefix} 
             suffix={k.suffix} 
             color={k.color} 
             icon={k.icon} 
             sparklinePath={k.sparkline}
+            trend={k.trend}
+            trendValue={k.trendValue}
           />
         ))}
       </div>
@@ -758,7 +897,7 @@ export function DashboardCharts({
         </div>
       </div>
 
-      {/* ── User Acquisition (Radar Chart) ───────────────────────── */}
+      {/* ── User Acquisition (Radar + Bar Chart) ───────────────────────── */}
       <div className="chart-card" style={{ marginBottom: 20 }}>
         <div className="chart-card-header">
           <div>
@@ -766,7 +905,11 @@ export function DashboardCharts({
             <div className="chart-sub">Signups by weekday · last 30 days</div>
           </div>
         </div>
-        <RadarChart data={dayData} />
+        
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, alignItems: "center" }}>
+          <RadarChart data={dayData} />
+          <BarChart data={dayData} />
+        </div>
       </div>
     </div>
   );

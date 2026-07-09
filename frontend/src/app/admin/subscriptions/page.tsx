@@ -284,7 +284,7 @@ export default async function AdminSubscriptions() {
                           {MODE_LABELS[item.mode] ?? item.mode}
                         </span>
                       </td>
-                      <td style={{ padding: "12px 20px", fontSize: 11, color: "var(--text-muted)", whiteSpace: "nowrap" }}>
+                      <td suppressHydrationWarning style={{ padding: "12px 20px", fontSize: 11, color: "var(--text-muted)", whiteSpace: "nowrap" }}>
                         {item.createdAt
                           ? formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })
                           : "—"}
