@@ -606,7 +606,7 @@ export default function VideoGeneratorPage() {
                   <span className="text-[11px] font-bold text-violet-300 tracking-wide uppercase">Video Access Required</span>
                 </div>
                 <p className="text-[10px] text-violet-200/70 leading-relaxed mb-3">
-                  Included with <strong className="text-violet-200">Pro (₹199)</strong> or <strong className="text-violet-200">Mega (₹499)</strong> pack.
+                  Included with <strong className="text-violet-200">Creator (₹399)</strong> or <strong className="text-violet-200">Professional (₹499)</strong> pack.
                 </p>
                 <a
                   href="/pricing"
