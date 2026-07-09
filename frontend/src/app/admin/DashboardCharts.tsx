@@ -622,13 +622,6 @@ function LiquidKpiCard({
         </div>
         
         <div style={{ 
-          fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.65)", 
-          letterSpacing: "-0.1px", marginBottom: 2,
-          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-        }}>
-          {label}
-        </div>
-        <div style={{ 
           fontSize: 26, fontWeight: 800, color: "#fff", 
           letterSpacing: "-1px", 
           lineHeight: 1,
@@ -674,7 +667,7 @@ export function DashboardCharts({
 
       {/* ── Liquid Glass KPI Cards ──────────────────────────────── */}
       <div 
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8"
+        className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8"
         style={{ perspective: "1000px" }}
       >
         {[
