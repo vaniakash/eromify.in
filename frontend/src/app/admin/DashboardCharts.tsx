@@ -291,45 +291,182 @@ function RevenueLineChart({ data, total }: { data: ChartPoint[]; total: number }
 }
 
 /* ─────────────────────────────────────────────────────────────────────
-   Animated Bar Chart (User Acquisition)
+   Interactive Spider Web (Radar) Chart (User Acquisition)
 ───────────────────────────────────────────────────────────────────── */
-function BarChart({ data }: { data: DayPoint[] }) {
+function RadarChart({ data }: { data: DayPoint[] }) {
   const [drawn, setDrawn] = useState(false);
-  useEffect(() => { setTimeout(() => setDrawn(true), 400); }, []);
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
-  const maxCount = Math.max(...data.map(d => d.count), 1);
-  const isPeak = (i: number) => data[i].count === maxCount && data[i].count > 0;
+  useEffect(() => { setTimeout(() => setDrawn(true), 300); }, []);
+
+  const W = 400, H = 260;
+  const cx = W / 2;
+  const cy = H / 2;
+  const maxRadius = Math.min(cx, cy) - 35;
+  const maxCount = Math.max(...data.map(d => d.count), 4);
+  const numLevels = 5;
+  const numPoints = data.length;
+
+  const getPoint = (val: number, index: number, overrideMax?: number) => {
+    const angle = (index * 2 * Math.PI) / numPoints - Math.PI / 2;
+    const r = (val / maxCount) * (overrideMax ?? maxRadius);
+    return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+  };
+
+  const gridPolygons = Array.from({ length: numLevels }).map((_, i) => {
+    const ratio = (i + 1) / numLevels;
+    return data.map((_, j) => {
+      const p = getPoint(maxCount, j, ratio * maxRadius);
+      return `${p.x},${p.y}`;
+    }).join(" ");
+  });
+
+  const dataPath = data.map((d, i) => {
+    const p = getPoint(d.count, i);
+    return `${i === 0 ? "M" : "L"}${p.x},${p.y}`;
+  }).join(" ") + " Z";
+
+  const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    const rect = svgRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const vx = (mx / rect.width) * W;
+    const vy = (my / rect.height) * H;
+    
+    const dx = vx - cx;
+    const dy = vy - cy;
+    let angle = Math.atan2(dy, dx) + Math.PI / 2;
+    if (angle < 0) angle += 2 * Math.PI;
+
+    const slice = (2 * Math.PI) / numPoints;
+    let idx = Math.round(angle / slice);
+    if (idx === numPoints) idx = 0;
+    
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist <= maxRadius + 40) {
+      setHoverIdx(idx);
+    } else {
+      setHoverIdx(null);
+    }
+  };
 
   return (
-    <div style={{ height: 160, display: "flex", alignItems: "flex-end", gap: 10, marginBottom: 12 }}>
-      {data.map((d, i) => {
-        const h = Math.max((d.count / maxCount) * 100, 3);
-        const peak = isPeak(i);
-        return (
-          <div key={d.label} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-            {/* Count label */}
-            <span style={{
-              fontSize: 10, fontWeight: 700, color: peak ? "#22d3ee" : "var(--text-muted)",
-              opacity: drawn ? 1 : 0, transition: `opacity 0.3s ease ${0.6 + i * 0.06}s`,
-            }}>
-              {d.count || ""}
-            </span>
-            <div style={{ width: "100%", borderRadius: "6px 6px 3px 3px", overflow: "hidden",
-              height: 130, display: "flex", alignItems: "flex-end" }}>
-              <div style={{
-                width: "100%",
-                height: drawn ? `${h}%` : "3%",
-                borderRadius: "6px 6px 3px 3px",
-                background: peak
-                  ? "linear-gradient(180deg, #22d3ee, #22d3ee88)"
-                  : "linear-gradient(180deg, rgba(124,108,254,0.5), rgba(124,108,254,0.15))",
-                boxShadow: peak ? "0 0 20px rgba(34,211,238,0.4)" : "none",
-                transition: `height 0.9s cubic-bezier(0.34,1.56,0.64,1) ${i * 80}ms`,
-              }} />
-            </div>
+    <div style={{ position: "relative", width: "100%", height: H, display: "flex", justifyContent: "center", marginBottom: 12 }}>
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${W} ${H}`}
+        style={{ width: "100%", height: "100%", overflow: "visible", cursor: "crosshair" }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => setHoverIdx(null)}
+      >
+        <defs>
+          <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#22d3ee" stopOpacity={0.45} />
+            <stop offset="100%" stopColor="#7c6cfe" stopOpacity={0.1} />
+          </radialGradient>
+          <filter id="radarglow">
+            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <clipPath id="radar-clip">
+            <circle cx={cx} cy={cy} r={drawn ? maxRadius + 20 : 0} style={{ transition: "r 1.2s cubic-bezier(0.34,1.56,0.64,1)" }} />
+          </clipPath>
+        </defs>
+
+        {/* Concentric grid lines (Web) */}
+        {gridPolygons.map((pts, i) => (
+          <polygon key={`grid-${i}`} points={pts} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={1} />
+        ))}
+
+        {/* Axes lines (Spokes) */}
+        {data.map((_, i) => {
+          const p = getPoint(maxCount, i);
+          const isHovered = hoverIdx === i;
+          return (
+            <line key={`axis-${i}`} x1={cx} y1={cy} x2={p.x} y2={p.y} 
+              stroke={isHovered ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.06)"} 
+              strokeWidth={isHovered ? 2 : 1}
+              style={{ transition: "all 0.3s ease" }}
+            />
+          );
+        })}
+
+        {/* Data Polygon */}
+        <g clipPath="url(#radar-clip)">
+          <path 
+            d={dataPath} 
+            fill="url(#radarGrad)" 
+            stroke="#22d3ee" 
+            strokeWidth={2.5} 
+            filter="url(#radarglow)" 
+            strokeLinejoin="round" 
+          />
+          
+          {/* Data Points */}
+          {data.map((d, i) => {
+            const p = getPoint(d.count, i);
+            const isHovered = hoverIdx === i;
+            return (
+              <g key={`pt-${i}`}>
+                <circle cx={p.x} cy={p.y} r={isHovered ? 6 : 3.5} fill="var(--bg-elevated)" stroke="#22d3ee" strokeWidth={2}
+                  style={{ transition: "all 0.3s ease" }}
+                  filter={isHovered ? "url(#radarglow)" : "none"}
+                />
+              </g>
+            );
+          })}
+        </g>
+
+        {/* Axes Labels */}
+        {data.map((d, i) => {
+          const p = getPoint(maxCount, i, maxRadius + 18);
+          const isHovered = hoverIdx === i;
+          let anchor: "start" | "middle" | "end" = "middle";
+          if (p.x > cx + 10) anchor = "start";
+          else if (p.x < cx - 10) anchor = "end";
+
+          return (
+            <text key={`label-${i}`} x={p.x} y={p.y + (p.y > cy ? 5 : -1)} textAnchor={anchor}
+              fontSize={11} fontWeight={isHovered ? 800 : 600} 
+              fill={isHovered ? "#22d3ee" : "rgba(139,149,184,0.6)"}
+              style={{ transition: "all 0.2s ease", textTransform: "uppercase" }}
+            >
+              {d.label.slice(0, 2)}
+            </text>
+          );
+        })}
+      </svg>
+
+      {/* Interactive Tooltip */}
+      {hoverIdx !== null && (
+        <div style={{
+          position: "absolute",
+          left: `${(getPoint(data[hoverIdx].count, hoverIdx).x / W) * 100}%`,
+          top: `${(getPoint(data[hoverIdx].count, hoverIdx).y / H) * 100}%`,
+          transform: "translate(-50%, -100%)",
+          marginTop: "-12px",
+          background: "var(--bg-elevated)",
+          border: "1px solid rgba(34,211,238,0.35)",
+          borderRadius: 8,
+          padding: "6px 12px",
+          pointerEvents: "none",
+          whiteSpace: "nowrap",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+          zIndex: 10,
+          opacity: drawn ? 1 : 0,
+          transition: "opacity 0.2s ease"
+        }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(139,149,184,0.8)" }}>
+            {data[hoverIdx].label}
           </div>
-        );
-      })}
+          <div style={{ fontSize: 16, fontWeight: 800, color: "#22d3ee", display: "flex", alignItems: "baseline", gap: 4 }}>
+            {data[hoverIdx].count}
+            <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.4)" }}>signups</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -356,6 +493,156 @@ function Legend({ items }: { items: { label: string; color: string; value: strin
 }
 
 /* ─────────────────────────────────────────────────────────────────────
+   Liquid Glass KPI Card (Apple WWDC 2025 Style)
+───────────────────────────────────────────────────────────────────── */
+function LiquidKpiCard({ 
+  label, val, prefix, suffix, color, icon, sparklinePath, index 
+}: { 
+  label: string; val: number; prefix: string; suffix: string; color: string; icon: string; sparklinePath: string; index: number;
+}) {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const [drawn, setDrawn] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { setTimeout(() => setDrawn(true), 200 + index * 100); }, [index]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: "20px",
+        padding: "16px",
+        cursor: "default",
+        transform: isHovered ? "translateY(-6px) scale(1.02)" : "translateY(0) scale(1)",
+        transition: "transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease, background 0.4s ease",
+        background: isHovered ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.02)",
+        backdropFilter: "blur(24px) saturate(180%)",
+        WebkitBackdropFilter: "blur(24px) saturate(180%)",
+        border: "1px solid rgba(255, 255, 255, 0.12)",
+        borderTop: "1px solid rgba(255, 255, 255, 0.25)",
+        boxShadow: isHovered 
+          ? `0 20px 40px -12px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.3), 0 0 24px ${color}33`
+          : `0 10px 20px -8px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.15)`,
+      }}
+    >
+      {/* Specular Highlight tracking mouse */}
+      <div 
+        style={{
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          background: `radial-gradient(circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.15) 0%, transparent 60%)`,
+          opacity: isHovered ? 1 : 0,
+          transition: "opacity 0.3s ease",
+          pointerEvents: "none",
+          mixBlendMode: "overlay",
+        }}
+      />
+      {/* Iridescent Base Gradient */}
+      <div 
+        style={{
+          position: "absolute", inset: 0,
+          background: `linear-gradient(135deg, ${color}1A 0%, transparent 50%, rgba(255,255,255,0.03) 100%)`,
+          pointerEvents: "none"
+        }}
+      />
+      
+      {/* Content */}
+      <div style={{ position: "relative", zIndex: 2 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+          <div style={{ 
+            width: 38, height: 38, 
+            borderRadius: "12px", 
+            background: `linear-gradient(135deg, ${color}33 0%, ${color}11 100%)`,
+            border: `1px solid ${color}44`,
+            borderTop: `1px solid ${color}88`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: `0 8px 16px ${color}22, inset 0 2px 4px rgba(255,255,255,0.2)`,
+            transform: isHovered ? "scale(1.05)" : "scale(1)",
+            transition: "transform 0.4s cubic-bezier(0.34,1.56,0.64,1)"
+          }}>
+            <span className="material-symbols-outlined" style={{ 
+              color: color, fontSize: 20, filter: `drop-shadow(0 0 8px ${color})` 
+            }}>
+              {icon}
+            </span>
+          </div>
+          
+          {/* Animated Sparkline */}
+          <div style={{ width: 60, height: 26, marginTop: 4 }}>
+             <svg width="100%" height="100%" viewBox="0 0 70 35" style={{ overflow: 'visible' }}>
+               <defs>
+                 <linearGradient id={`grad-${index}`} x1="0%" y1="0%" x2="0%" y2="100%">
+                   <stop offset="0%" stopColor={color} stopOpacity={0.6} />
+                   <stop offset="100%" stopColor={color} stopOpacity={0} />
+                 </linearGradient>
+               </defs>
+               <path 
+                 d={`${sparklinePath} L70,35 L0,35 Z`} 
+                 fill={`url(#grad-${index})`}
+                 style={{ opacity: drawn ? 1 : 0, transition: "opacity 1.5s ease 0.3s" }} 
+               />
+               <path 
+                 d={sparklinePath} 
+                 fill="none" 
+                 stroke={color} 
+                 strokeWidth={2.5} 
+                 strokeLinecap="round" 
+                 strokeLinejoin="round" 
+                 style={{ 
+                   filter: `drop-shadow(0 4px 6px ${color}66)`,
+                   strokeDasharray: 120,
+                   strokeDashoffset: drawn ? 0 : 120,
+                   transition: "stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)"
+                 }} 
+               />
+               <circle 
+                 cx="70" cy={sparklinePath.split(',').pop()?.split(' ')[0] || 10} r={4} 
+                 fill="#fff" stroke={color} strokeWidth={2}
+                 style={{ 
+                   opacity: drawn ? 1 : 0, 
+                   filter: `drop-shadow(0 0 6px ${color})`,
+                   transform: drawn ? "scale(1)" : "scale(0)",
+                   transformOrigin: `70px ${sparklinePath.split(',').pop()?.split(' ')[0] || 10}px`,
+                   transition: "all 0.5s cubic-bezier(0.34,1.56,0.64,1) 1.2s" 
+                 }} 
+               />
+             </svg>
+          </div>
+        </div>
+        
+        <div style={{ 
+          fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.65)", 
+          letterSpacing: "-0.1px", marginBottom: 2,
+          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        }}>
+          {label}
+        </div>
+        <div style={{ 
+          fontSize: 26, fontWeight: 800, color: "#fff", 
+          letterSpacing: "-1px", 
+          lineHeight: 1,
+          textShadow: "0 6px 12px rgba(0,0,0,0.3)",
+          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        }}>
+          {prefix}{val.toLocaleString("en-IN")}{suffix}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────
    Main exported component
 ───────────────────────────────────────────────────────────────────── */
 export function DashboardCharts({
@@ -375,34 +662,38 @@ export function DashboardCharts({
   // Day labels
   const dayLabels = dayData.map(d => d.label.slice(0, 2));
 
+  const sparklines = [
+    "M 0,25 C 20,25 30,10 70,5",
+    "M 0,20 C 15,5 40,25 70,10",
+    "M 0,15 C 25,30 35,5 70,0",
+    "M 0,30 C 20,10 50,20 70,10",
+  ];
+
   return (
     <div>
 
-      {/* ── Animated KPI counter row ──────────────────────────────── */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 28,
-      }} className="kpi-anim-grid">
+      {/* ── Liquid Glass KPI Cards ──────────────────────────────── */}
+      <div 
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8"
+        style={{ perspective: "1000px" }}
+      >
         {[
-          { label: "Total Users",    val: cUsers,   prefix: "",  suffix: "",  color: "#7c6cfe", icon: "group" },
-          { label: "Pro Members",    val: cSubs,    prefix: "",  suffix: "",  color: "#22d3ee", icon: "workspace_premium" },
-          { label: "Total Revenue",  val: cRevenue, prefix: "₹", suffix: "",  color: "#34d399", icon: "payments" },
-          { label: "This Month",     val: cMrr,     prefix: "₹", suffix: "",  color: "#fbbf24", icon: "trending_up" },
-        ].map((k) => (
-          <div key={k.label} className="kpi-card" style={{ textAlign: "center", position: "relative", overflow: "hidden" }}>
-            {/* animated glow pulse */}
-            <div style={{
-              position: "absolute", inset: 0, borderRadius: "inherit",
-              background: `radial-gradient(circle at 50% 0%, ${k.color}12 0%, transparent 70%)`,
-              animation: "pulse-glow 3s ease-in-out infinite",
-            }} />
-            <div className="kpi-icon-wrap" style={{ background: `${k.color}1a`, color: k.color, margin: "0 auto 10px" }}>
-              <span className="material-symbols-outlined">{k.icon}</span>
-            </div>
-            <div className="kpi-label">{k.label}</div>
-            <div className="kpi-value" style={{ color: k.color }}>
-              {k.prefix}{k.val.toLocaleString("en-IN")}{k.suffix}
-            </div>
-          </div>
+          { label: "Total Users",    val: cUsers,   prefix: "",  suffix: "",  color: "#7c6cfe", icon: "group",             sparkline: sparklines[0] },
+          { label: "Pro Members",    val: cSubs,    prefix: "",  suffix: "",  color: "#22d3ee", icon: "workspace_premium", sparkline: sparklines[1] },
+          { label: "Total Revenue",  val: cRevenue, prefix: "₹", suffix: "",  color: "#34d399", icon: "payments",          sparkline: sparklines[2] },
+          { label: "This Month",     val: cMrr,     prefix: "₹", suffix: "",  color: "#fbbf24", icon: "trending_up",       sparkline: sparklines[3] },
+        ].map((k, i) => (
+          <LiquidKpiCard 
+            key={k.label} 
+            index={i}
+            label={k.label} 
+            val={k.val} 
+            prefix={k.prefix} 
+            suffix={k.suffix} 
+            color={k.color} 
+            icon={k.icon} 
+            sparklinePath={k.sparkline}
+          />
         ))}
       </div>
 
@@ -474,7 +765,7 @@ export function DashboardCharts({
         </div>
       </div>
 
-      {/* ── User Acquisition animated bars ───────────────────────── */}
+      {/* ── User Acquisition (Radar Chart) ───────────────────────── */}
       <div className="chart-card" style={{ marginBottom: 20 }}>
         <div className="chart-card-header">
           <div>
@@ -482,12 +773,7 @@ export function DashboardCharts({
             <div className="chart-sub">Signups by weekday · last 30 days</div>
           </div>
         </div>
-        <BarChart data={dayData} />
-        <div style={{ display: "flex", justifyContent: "space-between",
-          fontSize: 9, fontWeight: 700, letterSpacing: "0.5px",
-          color: "var(--text-muted)", textTransform: "uppercase" }}>
-          {dayData.map(d => <span key={d.label}>{d.label.slice(0, 2)}</span>)}
-        </div>
+        <RadarChart data={dayData} />
       </div>
     </div>
   );

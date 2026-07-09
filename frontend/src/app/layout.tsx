@@ -5,6 +5,7 @@ import { Navbar } from "@/components/navbar/Navbar";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -155,26 +156,31 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script
+        {/* We leave the <head> empty or for metadata. The scripts are injected by Next.js automatically. */}
+      </head>
+      <body className={inter.className} suppressHydrationWarning>
+        {/* External Scripts via next/script */}
+        <Script
+          id="adsense"
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4692600238249678"
           crossOrigin="anonymous"
-        ></script>
-        {/* Google tag (gtag.js) */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLT8K1QBQM"></script>
-        <script
-          id="google-analytics"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-KLT8K1QBQM');
-            `,
-          }}
+          strategy="lazyOnload"
         />
-      </head>
-      <body className={inter.className} suppressHydrationWarning>
+        <Script 
+          id="gtag-script" 
+          async 
+          src="https://www.googletagmanager.com/gtag/js?id=G-KLT8K1QBQM" 
+          strategy="afterInteractive" 
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-KLT8K1QBQM');
+          `}
+        </Script>
         {/* Global structured data on every page */}
         <script
           type="application/ld+json"
