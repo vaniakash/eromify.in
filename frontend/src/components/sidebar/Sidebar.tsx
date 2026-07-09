@@ -220,11 +220,11 @@ export function Sidebar({ mobile = false, onNavigate }: SidebarProps) {
 
           {/* Video — LIVE with NEW badge */}
           <Link
-            href="/tools/creator/video-generator"
+            href="/video-generation"
             onClick={onNavigate}
             className={cn(
               "flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg transition-all text-sm font-medium",
-              pathname === "/tools/creator/video-generator"
+              pathname === "/video-generation"
                 ? "bg-[#1736cf]/10 text-[#1736cf]"
                 : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
             )}
@@ -233,7 +233,7 @@ export function Sidebar({ mobile = false, onNavigate }: SidebarProps) {
               <Video
                 className={cn(
                   "h-4 w-4",
-                  pathname === "/tools/creator/video-generator" ? "text-[#1736cf]" : "text-slate-500"
+                  pathname === "/video-generation" ? "text-[#1736cf]" : "text-slate-500"
                 )}
               />
               <span className="font-medium">Video</span>

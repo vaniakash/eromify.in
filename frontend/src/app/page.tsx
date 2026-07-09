@@ -273,9 +273,9 @@ export default function HomePage() {
             <div className="w-full lg:w-[65%] overflow-x-auto flex gap-4 pb-4 lg:pb-0 pt-2 lg:pt-0 snap-x snap-mandatory z-10 hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {[
                 { title: "Create Image", img: "/loginlayout/logind.webp", link: "/tools/creator/image-generator", isNew: false },
-                { title: "Create Video", video: CLD.seefour, link: "/tools/creator/video-generator", isNew: false },
-                { title: "Seedance 2.0", video: CLD.seedancesix, link: "/tools/creator/video-generator", isNew: true },
-                { title: "Wan 2.7", video: CLD.seedance, link: "/tools/creator/video-generator", isNew: false },
+                { title: "Create Video", video: CLD.seefour, link: "/video-generation", isNew: false },
+                { title: "Seedance 2.0", video: CLD.seedancesix, link: "/video-generation", isNew: true },
+                { title: "Wan 2.7", video: CLD.seedance, link: "/video-generation", isNew: false },
               ].map((tool, i) => (
                 <Link
                   key={i}
@@ -553,7 +553,7 @@ export default function HomePage() {
                 {/* Create Button Overlaying the Image */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[80%]">
                   <Link
-                    href="/tools/creator/video-generator"
+                    href="/video-generation"
                     className="block w-full bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-300 hover:to-cyan-300 text-black font-bold py-2.5 px-6 rounded-lg text-center shadow-[0_0_20px_rgba(56,189,248,0.4)] transition-all hover:scale-105"
                   >
                     Create
@@ -585,7 +585,7 @@ export default function HomePage() {
               {/* Overlay Button */}
               <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 z-20 pointer-events-none">
                 <Link
-                  href="/tools/creator/video-generator"
+                  href="/video-generation"
                   className="bg-[#ccff00]/90 hover:bg-[#ccff00] text-black font-bold py-1.5 px-4 md:py-2 md:px-5 rounded-lg text-xs md:text-sm transition-all shadow-lg flex items-center gap-1.5 md:gap-2 backdrop-blur-md pointer-events-auto"
                 >
                   View all <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />

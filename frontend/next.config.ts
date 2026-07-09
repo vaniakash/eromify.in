@@ -44,6 +44,11 @@ const nextConfig: NextConfig = {
         destination: "/login",
         permanent: true,
       },
+      {
+        source: "/tools/creator/video-generator",
+        destination: "/video-generation",
+        permanent: true,
+      },
     ];
   },
   async headers() {

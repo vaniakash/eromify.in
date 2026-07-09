@@ -247,7 +247,7 @@ export default function VideoGeneratorPage() {
     if (!prompt.trim() || generating) return;
     // Gate: require login only when user tries to generate
     if (status !== "authenticated") {
-      router.push("/login?callbackUrl=/tools/creator/video-generator");
+      router.push("/login?callbackUrl=/video-generation");
       return;
     }
     setError(null);

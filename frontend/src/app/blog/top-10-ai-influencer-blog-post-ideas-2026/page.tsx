@@ -387,7 +387,7 @@ export default function TopAiInfluencerBlogIdeasPage() {
                   <h3 className="font-black text-slate-900 group-hover:text-[#1736cf]">AI Influencer Creator</h3>
                   <p className="text-sm text-slate-600 mt-1">Build virtual creator visuals and keep your AI persona aligned with a niche.</p>
                 </Link>
-                <Link href="/tools/creator/video-generator" className="group rounded-2xl border border-slate-200 p-5 hover:border-[#1736cf] hover:bg-[#1736cf]/5 transition-all">
+                <Link href="/video-generation" className="group rounded-2xl border border-slate-200 p-5 hover:border-[#1736cf] hover:bg-[#1736cf]/5 transition-all">
                   <Video className="h-6 w-6 text-[#1736cf] mb-3" />
                   <h3 className="font-black text-slate-900 group-hover:text-[#1736cf]">AI Video Generator</h3>
                   <p className="text-sm text-slate-600 mt-1">Convert ideas into cinematic short-form assets for social campaigns.</p>

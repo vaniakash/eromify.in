@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/blog/eromify-alternative',         priority: 0.98, freq: 'weekly' },
     { path: '/pricing',                          priority: 0.95, freq: 'weekly' },
     { path: '/ai-influencer-studio',             priority: 0.9,  freq: 'weekly' },
+    { path: '/video-generation',                 priority: 0.95, freq: 'weekly' },
     { path: '/about',                            priority: 0.8,  freq: 'monthly' },
     // SEO landing pages
     { path: '/ai-influencer-generator',          priority: 0.95, freq: 'weekly' },
