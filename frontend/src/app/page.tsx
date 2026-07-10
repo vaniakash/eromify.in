@@ -396,7 +396,7 @@ export default function HomePage() {
               {/* CTAs */}
               <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
-                  href="/mcp-keys"
+                  href={isUserPro ? "/mcp-keys" : "/pricing"}
                   className="inline-flex items-center gap-2 px-7 py-3.5 bg-white text-black font-bold rounded-xl hover:bg-slate-100 hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] text-sm"
                 >
                   Connect Claude
