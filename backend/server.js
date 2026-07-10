@@ -1,7 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const generateVideoRoute = require("./routes/generate-video");
+const generateVideoRoute    = require("./routes/generate-video");
+const mcpInternalVideoRoute = require("./routes/mcp-internal-video");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -26,7 +27,7 @@ app.use(
         callback(new Error(`CORS blocked: ${origin}`));
       }
     },
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -43,7 +44,8 @@ app.get("/health", (req, res) => {
 });
 
 // ── Routes ────────────────────────────────────────────────────────────────────
-app.use("/generate-video", generateVideoRoute);
+app.use("/generate-video",         generateVideoRoute);
+app.use("/mcp-internal/generate-video", mcpInternalVideoRoute);
 
 // ── 404 handler ──────────────────────────────────────────────────────────────
 app.use((req, res) => {

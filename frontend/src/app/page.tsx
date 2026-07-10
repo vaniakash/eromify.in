@@ -246,6 +246,181 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* CLAUDE CONNECTOR SECTION */}
+        <section className="mb-10 px-1 w-full">
+          <div className="relative bg-[#080a0f] rounded-3xl border border-white/8 overflow-hidden">
+
+            {/* Background radial glows */}
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[#c17d3c]/10 rounded-full blur-[120px]" />
+              <div className="absolute -bottom-24 right-0 w-[400px] h-[400px] bg-violet-700/8 rounded-full blur-[100px]" />
+            </div>
+
+            <div className="relative z-10 p-8 lg:p-14">
+
+              {/* Badge */}
+              <div className="flex justify-center mb-6">
+                <span className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-[#c17d3c]/40 bg-[#c17d3c]/10 text-[#e8a96a] text-xs font-bold tracking-widest uppercase">
+                  MCP Connector &middot; Growth &amp; Creator
+                  <span className="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-black tracking-normal ml-1">NEW</span>
+                </span>
+              </div>
+
+              {/* Headline */}
+              <h2 className="text-center text-3xl sm:text-4xl lg:text-6xl font-black text-white leading-[1.05] tracking-tight mb-5 uppercase">
+                Turn{" "}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/claude-color.webp"
+                  alt="Claude"
+                  className="inline-block h-10 sm:h-12 lg:h-16 w-auto align-middle -mt-1 mx-1"
+                />{" "}
+                Claude Into Your
+                <br className="hidden sm:block" /> Creative Engine
+              </h2>
+
+              <p className="text-center text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mb-12 leading-relaxed">
+                Plug Eromify into Claude and generate avatar portraits, cinematic videos, and full content weeks &mdash; all without leaving your chat window.
+              </p>
+
+              {/* Two-column layout */}
+              <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
+
+                {/* Left: Chat mockup */}
+                <div className="w-full lg:w-[55%] shrink-0">
+                  <div className="bg-[#111318] border border-white/10 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+
+                    {/* Window chrome */}
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-white/8 bg-[#0d0f14]">
+                      <div className="flex gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                        <div className="w-3 h-3 rounded-full bg-amber-400/80" />
+                        <div className="w-3 h-3 rounded-full bg-emerald-400/80" />
+                      </div>
+                      <span className="text-[10px] font-mono text-slate-500 tracking-widest uppercase">
+                        Claude &middot; Eromify Connector
+                      </span>
+                      <div className="w-12" />
+                    </div>
+
+                    {/* Chat body */}
+                    <div className="p-5 space-y-5">
+
+                      {/* User bubble */}
+                      <div className="flex justify-end">
+                        <div className="max-w-[85%] bg-white/8 border border-white/10 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-slate-200 leading-relaxed">
+                          Shoot 6 IG-ready photos of Aria this week &mdash; mix outfits, moods, and lighting. Indoor cafe vibes and outdoor rooftop. 4:5 portrait.
+                        </div>
+                      </div>
+
+                      {/* Claude response */}
+                      <div className="flex gap-3 items-start">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src="/claude-color.webp" alt="" className="w-5 h-5 object-contain" />
+                        </div>
+                        <div className="flex-1 text-sm text-slate-300 leading-relaxed">
+                          <p className="mb-3">
+                            On it. Generating 6 portraits of Aria &mdash; mixing warm cafe corners, rooftop golden hour, and moody studio lighting.
+                          </p>
+
+                          {/* Image grid */}
+                          <div className="grid grid-cols-3 gap-1.5 rounded-xl overflow-hidden">
+                            {[
+                              "/modie/gg.png",
+                              "/modie/kira.png",
+                              "/modie/ria.png",
+                              "/modie/sia.png",
+                              "/modie/sofi.png",
+                              "/modie/sturm.png",
+                            ].map((src, i) => (
+                              /* eslint-disable-next-line @next/next/no-img-element */
+                              <img
+                                key={i}
+                                src={src}
+                                alt={`Generated portrait ${i + 1}`}
+                                className="w-full aspect-[4/5] object-cover rounded-md"
+                              />
+                            ))}
+                          </div>
+
+                          {/* Stats bar */}
+                          <p className="mt-3 text-[11px] font-mono text-slate-500 tracking-wider uppercase">
+                            6 Images &middot; 45 Credits &middot; ~30s
+                          </p>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Feature list */}
+                <div className="w-full lg:w-[45%] flex flex-col gap-4 lg:pt-2">
+                  {[
+                    {
+                      num: "01",
+                      title: "Address your avatars by name",
+                      body: "Aria, Maya, Luna — Claude knows which persona to use and keeps them in character across every prompt.",
+                    },
+                    {
+                      num: "02",
+                      title: "Batch-generate a week of content",
+                      body: "One prompt, one send. Twelve portraits rendered while you plan what to post next.",
+                    },
+                    {
+                      num: "03",
+                      title: "Kick off videos without switching tabs",
+                      body: "Animate any image with Wan, Veo, or Seedance — Claude picks the right model and queues it automatically.",
+                    },
+                  ].map(({ num, title, body }) => (
+                    <div
+                      key={num}
+                      className="bg-white/4 border border-white/8 rounded-2xl p-5 hover:border-[#c17d3c]/40 hover:bg-white/6 transition-all duration-300"
+                    >
+                      <div className="flex items-start gap-4">
+                        <span className="text-[#c17d3c] font-mono text-sm font-bold shrink-0 mt-0.5">
+                          {num}
+                        </span>
+                        <div>
+                          <p className="text-white font-bold text-sm mb-1.5">{title}</p>
+                          <p className="text-slate-400 text-sm leading-relaxed">{body}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+
+              {/* CTAs */}
+              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link
+                  href="/mcp-keys"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-white text-black font-bold rounded-xl hover:bg-slate-100 hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] text-sm"
+                >
+                  Connect Claude
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/mcp"
+                  className="text-sm font-semibold text-slate-400 hover:text-white transition-colors"
+                >
+                  See how it works
+                </Link>
+              </div>
+
+              {/* Fine print */}
+              <p className="mt-6 text-center text-xs text-slate-600 leading-relaxed">
+                Available on{" "}
+                <span className="text-slate-400 font-semibold">Growth</span> and{" "}
+                <span className="text-slate-400 font-semibold">Creator</span> plans &middot; 5-minute setup &middot; Works with Claude Desktop, claude.ai &amp; Cursor
+              </p>
+
+            </div>
+          </div>
+        </section>
+
         {/* WHAT WILL YOU CREATE TODAY */}
         <section className="mb-10 px-1 w-full">
           <div className="bg-[#101314] rounded-3xl p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-8 relative overflow-hidden">
@@ -687,6 +862,7 @@ export default function HomePage() {
           </div>
 
         </section>
+
 
         {/* FAQ SECTION */}
         <section className="mb-10 mt-16 max-w-4xl mx-auto">

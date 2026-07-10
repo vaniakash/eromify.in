@@ -75,6 +75,7 @@ const PLANS: {
         "Commercial use",
         "Priority queue",
         "🎬 Video Generation Access",
+        "mcp:Claude MCP AUTOMATION",
         "Wan 2.6",
         "Wan 2.2 Fast",
         "LTX-2.3",
@@ -99,6 +100,7 @@ const PLANS: {
         "Influencer Training",
         "Image generation",
         "🎬 Video generation",
+        "mcp:Claude MCP AUTOMATION",
         "Workflow Canvas",
         "Motion Control",
         "Face Swap",
@@ -469,7 +471,8 @@ export default function PricingPage() {
                     <ul className="space-y-3 mb-8 flex-1">
                       {plan.features.map((feat) => {
                         const isDisabled = feat.startsWith("disabled:");
-                        const cleanFeat = feat.replace("disabled:", "").replace("🎬 ", "");
+                        const isMcp = feat.startsWith("mcp:");
+                        const cleanFeat = feat.replace("disabled:", "").replace("🎬 ", "").replace("mcp:", "");
 
                         return (
                           <li key={feat} className={`flex items-center gap-3 ${isDisabled ? "opacity-50" : ""}`}>
@@ -486,6 +489,8 @@ export default function PricingPage() {
                             >
                               {isDisabled ? (
                                 <Lock className="h-3 w-3" style={{ color: "rgba(255,255,255,0.3)" }} />
+                              ) : isMcp ? (
+                                <img src="/claude-color.webp" alt="Claude" className="w-3 h-3 object-contain" />
                               ) : feat.includes("🎬") ? (
                                 <Video className="h-3 w-3" style={{ color: plan.accent }} />
                               ) : (

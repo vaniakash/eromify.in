@@ -9,6 +9,7 @@ import {
   LogOut,
   Zap,
   Plus,
+  Key,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -167,6 +168,15 @@ export function Navbar() {
                       <p className="text-sm font-bold text-slate-900 truncate">{session.user.name}</p>
                       <p className="text-xs text-slate-500 truncate">{session.user.email}</p>
                     </div>
+                    {/* MCP Keys */}
+                      <Link
+                        href="/mcp-keys"
+                        onClick={() => setProfileOpen(false)}
+                        className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 transition-colors font-medium"
+                      >
+                        <Key className="h-4 w-4 text-violet-500" />
+                        MCP Keys
+                      </Link>
                     {/* Sign Out */}
                     <button
                       onClick={() => { setProfileOpen(false); signOut(); }}
@@ -182,11 +192,12 @@ export function Navbar() {
           ) : (
             <Button
               asChild
-              className="bg-[#1736cf] hover:bg-[#1430b8] text-white font-semibold shadow-sm cursor-pointer"
+              className="relative overflow-hidden group bg-gradient-to-r from-[#1736cf] to-[#4b61db] hover:from-[#1430b8] hover:to-[#3e53c4] text-white font-bold cursor-pointer shadow-md transition-all hover:shadow-[0_0_20px_rgba(23,54,207,0.4)] hover:-translate-y-0.5 border-0"
               size="sm"
             >
-              <Link href="/login">
-                Register
+              <Link href="/login" className="flex items-center">
+                <span className="relative z-10">Start Creating</span>
+                <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] transition-transform duration-1000 ease-in-out group-hover:translate-x-[200%] bg-gradient-to-r from-transparent via-white/40 to-transparent z-0 w-1/2 -skew-x-12" />
               </Link>
             </Button>
           )}

@@ -34,6 +34,13 @@ const navItems = [
     active: true,
   },
   {
+    label: "MCP",
+    href: "/mcp",
+    icon: Code2,
+    active: true,
+    isUpcoming: true,
+  },
+  {
     label: "Creator",
     href: "/tools/creator",
     icon: FileText,
@@ -174,6 +181,11 @@ export function Sidebar({ mobile = false, onNavigate }: SidebarProps) {
                   }}
                 >
                   New
+                </span>
+              )}
+              {(item as any).isUpcoming && (
+                <span className="text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-wide animate-pulse shrink-0 bg-red-100 text-red-600 border border-red-200">
+                  Upcoming
                 </span>
               )}
             </Link>
