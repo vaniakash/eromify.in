@@ -156,17 +156,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* We leave the <head> empty or for metadata. The scripts are injected by Next.js automatically. */}
+        <script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4692600238249678" 
+          crossOrigin="anonymous" 
+        />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         {/* External Scripts via next/script */}
-        <Script
-          id="adsense"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4692600238249678"
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
-        />
         <Script 
           id="gtag-script" 
           async 
