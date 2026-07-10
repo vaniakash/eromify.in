@@ -20,8 +20,8 @@ const PLANS: {
   videoAccess?: boolean;
 }[] = [
     {
-      id: "value", name: "Beginner Pack", tagline: "₹149 · ~$1.49",
-      price: 149, mrp: 599, discount: 75, credits: 1200, unitPrice: "",
+      id: "value", name: "Beginner Pack", tagline: "₹99 · ~$1.19",
+      price: 99, mrp: 599, discount: 83, credits: 1200, unitPrice: "",
       accent: "#3b82f6", glow: "rgba(59,130,246,0.28)", border: "rgba(59,130,246,0.45)",
       iconBg: "linear-gradient(135deg,#1e3a8a,#1d4ed8)",
       icon: Star,
@@ -599,7 +599,7 @@ export default function PricingPage() {
                 </div>
                 <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
                   {[
-                    { pack: "Beginner Pack ₹149", internal: "1,200 credits", images: "12 images", videos: "—", color: "#60a5fa" },
+                    { pack: "Beginner Pack ₹99", internal: "1,200 credits", images: "12 images", videos: "—", color: "#60a5fa" },
                     { pack: "Creator Pack ₹399", internal: "3,000 credits", images: "30 images", videos: "2 videos", color: "#c084fc" },
                     { pack: "Professional Pack ₹499", internal: "10,000 credits", images: "100 images", videos: "6 videos", color: "#f87171" },
                     { pack: "Enterprise Pack ₹1999", internal: "40,000 credits", images: "400 images", videos: "26 videos", color: "#facc15" },

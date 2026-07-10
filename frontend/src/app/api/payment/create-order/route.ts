@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
     // Define pricing tiers
     const tiers: Record<string, { pricePaise: number; credits: number }> = {
-      value:   { pricePaise: 14900,  credits: 1200 },
+      value:   { pricePaise: 9900,  credits: 1200 },
       pro:     { pricePaise: 39900, credits: 3000 },
       mega:    { pricePaise: 49900, credits: 10000 },
       premium: { pricePaise: 199900, credits: 40000 },
