@@ -11,6 +11,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { randomBytes, createHash }   from "crypto";
+import { Types }                     from "mongoose";
 import { auth }                      from "@/auth";
 import { connectDB }                 from "@/lib/db";
 import { User }                      from "@/models/User";
@@ -164,13 +165,18 @@ export async function DELETE(request: NextRequest) {
 
   await connectDB();
 
+  // Validate that keyId is a valid ObjectId before querying
+  if (!Types.ObjectId.isValid(keyId)) {
+    return NextResponse.json({ error: "Invalid key ID format" }, { status: 400 });
+  }
+
   // Set revokedAt — the auth middleware checks for revokedAt absence so this
   // takes effect on the NEXT request (within milliseconds of this call)
   const result = await User.updateOne(
     {
       email: session.user.email,
-      "mcpApiKeys._id": keyId,
-      "mcpApiKeys.revokedAt": { $exists: false }, // only revoke if not already revoked
+      "mcpApiKeys._id":       new Types.ObjectId(keyId), // cast string → ObjectId
+      "mcpApiKeys.revokedAt": { $exists: false },        // only revoke if not already revoked
     },
     {
       $set: { "mcpApiKeys.$.revokedAt": new Date() },
