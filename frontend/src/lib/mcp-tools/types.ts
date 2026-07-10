@@ -45,4 +45,5 @@ export interface McpUserContext {
   credits: number;
   isPro: boolean;
   videoAccess: boolean;
+  mcpAccess: boolean;
 }

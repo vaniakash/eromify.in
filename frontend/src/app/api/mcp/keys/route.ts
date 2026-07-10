@@ -80,10 +80,22 @@ export async function POST(request: NextRequest) {
   }
 
   await connectDB();
-  const user = await User.findOne({ email: session.user.email }).select("mcpApiKeys");
+  const user = await User.findOne({ email: session.user.email }).select("mcpApiKeys mcpAccess");
 
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  // ── Professional Pack gate ─────────────────────────────────────────────────
+  if (!user.mcpAccess) {
+    return NextResponse.json(
+      {
+        error:   "Professional Pack required",
+        message: "Claude MCP access is exclusive to the Professional Pack (₹499) and Enterprise Pack (₹1999). Upgrade at eromify.in/pricing.",
+        code:    "MCP_PLAN_REQUIRED",
+      },
+      { status: 403 }
+    );
   }
 
   // Enforce per-user key limit

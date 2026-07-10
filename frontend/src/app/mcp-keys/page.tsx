@@ -69,6 +69,7 @@ export default function McpKeysPage() {
   const [showNewKeyForm, setShowNewKeyForm] = useState(false);
   const [revokingId, setRevokingId] = useState<string | null>(null);
   const [keyVisible, setKeyVisible] = useState(false);
+  const [mcpBlocked, setMcpBlocked] = useState(false); // true when user lacks Professional Pack
 
   const mcpEndpoint =
     typeof window !== "undefined"
@@ -82,8 +83,13 @@ export default function McpKeysPage() {
     setError(null);
     try {
       const res = await fetch("/api/mcp/keys");
-      if (!res.ok) throw new Error("Failed to load keys");
       const data = await res.json();
+      if (res.status === 403 && data.code === "MCP_PLAN_REQUIRED") {
+        setMcpBlocked(true);
+        return;
+      }
+      if (!res.ok) throw new Error("Failed to load keys");
+      setMcpBlocked(false);
       setKeys(data.keys ?? []);
     } catch {
       setError("Failed to load API keys. Please refresh.");
@@ -172,6 +178,45 @@ export default function McpKeysPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  // ── Professional Pack gate — upgrade wall ───────────────────────────────────
+  if (!loading && mcpBlocked) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mx-auto mb-6">
+            <Key className="w-8 h-8 text-violet-500" />
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">Professional Pack Required</h1>
+          <p className="text-slate-500 mb-8 leading-relaxed">
+            Claude MCP access is exclusive to the <strong>Professional Pack (₹499)</strong> and{" "}
+            <strong>Enterprise Pack (₹1999)</strong>. Upgrade to unlock:
+          </p>
+          <ul className="text-left space-y-3 mb-8 bg-white rounded-2xl border border-slate-200 p-5">
+            {[
+              "Generate images & videos directly from Claude",
+              "List & manage your avatars by name",
+              "Check credit balance in any Claude chat",
+              "Connect Cursor, VS Code, and any MCP client",
+              "13 tools, one connection — no API keys to paste",
+            ].map((feature) => (
+              <li key={feature} className="flex items-start gap-3 text-sm text-slate-700">
+                <span className="text-violet-500 font-bold shrink-0 mt-0.5">✓</span>
+                {feature}
+              </li>
+            ))}
+          </ul>
+          <a
+            href="/pricing"
+            className="block w-full py-3 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+          >
+            Upgrade to Professional Pack — ₹499
+          </a>
+          <p className="text-xs text-slate-400 mt-4">One-time purchase · 10,000 credits included</p>
+        </div>
       </div>
     );
   }

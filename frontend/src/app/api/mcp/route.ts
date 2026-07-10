@@ -83,6 +83,7 @@ function toUserContext(user: IUser & { _id: mongoose.Types.ObjectId }): McpUserC
     credits:     typeof user.credits === "number" ? user.credits : 0,
     isPro:       user.isPro === true,
     videoAccess: user.videoAccess === true,
+    mcpAccess:   user.mcpAccess === true,
   };
 }
 
@@ -192,6 +193,18 @@ export async function POST(request: NextRequest) {
       if (!rateResult.allowed) {
         return rpcOk(id, {
           content: [{ type: "text", text: rateLimitErrorMessage(rateResult) }],
+          isError: true,
+        });
+      }
+
+      // ── Professional Pack gate — checked on every tools/call ──────────────
+      // Covers refunds, plan downgrades, or keys issued before this check existed.
+      if (!userCtx.mcpAccess) {
+        return rpcOk(id, {
+          content: [{
+            type: "text",
+            text: "⛔ Claude MCP access requires the Professional Pack (₹499) or Enterprise Pack (₹1999). Upgrade at https://eromify.in/pricing",
+          }],
           isError: true,
         });
       }

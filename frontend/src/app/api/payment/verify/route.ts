@@ -46,15 +46,18 @@ export async function POST(request: Request) {
     // MongoDB's $inc safely initialises a missing field to 0 before incrementing.
     if (userEmail && payment?.creditsToAdd) {
       // Only pro and mega packs include Video Generation Access
-      const hasVideoAccess = ["pro", "mega"].includes(payment.plan || "");
+      const hasVideoAccess = ["pro", "mega", "premium"].includes(payment.plan || "");
+      // MCP Access is exclusive to Professional (mega) and Enterprise (premium) packs
+      const hasMcpAccess   = ["mega", "premium"].includes(payment.plan || "");
 
       const result = await User.updateOne(
         { email: userEmail },
         {
           $inc: { credits: payment.creditsToAdd },
           $set: {
-            isPro: true,                    // ← Pro badge for all paying users
-            ...(hasVideoAccess && { videoAccess: true }), // ← Video only for pro/mega
+            isPro: true,                                          // ← Pro badge for all paying users
+            ...(hasVideoAccess && { videoAccess: true }),         // ← Video only for pro/mega/premium
+            ...(hasMcpAccess   && { mcpAccess:   true  }),        // ← MCP only for mega/premium
           },
         }
       );

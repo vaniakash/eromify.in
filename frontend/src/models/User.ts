@@ -25,6 +25,7 @@ export interface IUser {
   proExpiresAt?: Date | null;
   credits?: number;
   videoAccess?: boolean;  // true only for Pro Pack (₹199) & Mega Pack (₹499)
+  mcpAccess?: boolean;    // true only for Professional Pack (₹499/mega) & Enterprise Pack (₹1999/premium)
   mcpApiKeys?: IMcpApiKey[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -51,6 +52,7 @@ const UserSchema = new Schema<IUser>(
     proExpiresAt:  { type: Date, default: null },
     credits:       { type: Number, default: 0 },
     videoAccess:   { type: Boolean, default: false },
+    mcpAccess:     { type: Boolean, default: false },
     mcpApiKeys:    { type: [McpApiKeySchema], default: [] },
   },
   { timestamps: true }
