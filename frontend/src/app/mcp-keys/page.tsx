@@ -28,7 +28,14 @@ import {
   RefreshCw,
   Eye,
   EyeOff,
+  Zap,
+  Shield,
 } from "lucide-react";
+
+// ── Constants (exposed via NEXT_PUBLIC so the client can read them) ────────────
+const OAUTH_CLIENT_ID     = process.env.NEXT_PUBLIC_MCP_OAUTH_CLIENT_ID     ?? "eromify-mcp-claude";
+const OAUTH_CLIENT_SECRET = process.env.NEXT_PUBLIC_MCP_OAUTH_CLIENT_SECRET ?? "(ask support)";
+
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -69,7 +76,10 @@ export default function McpKeysPage() {
   const [showNewKeyForm, setShowNewKeyForm] = useState(false);
   const [revokingId, setRevokingId] = useState<string | null>(null);
   const [keyVisible, setKeyVisible] = useState(false);
-  const [mcpBlocked, setMcpBlocked] = useState(false); // true when user lacks Professional Pack
+  const [mcpBlocked, setMcpBlocked] = useState(false);
+  const [connectTab, setConnectTab] = useState<"oauth" | "apikey">("oauth");
+  const [oauthSecretVisible, setOauthSecretVisible] = useState(false);
+
 
   const mcpEndpoint =
     typeof window !== "undefined"
@@ -302,41 +312,124 @@ export default function McpKeysPage() {
         )}
 
         {/* ── Setup instructions ── */}
-        <div className="mb-6 p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
-          <div className="flex items-center gap-2 mb-3">
-            <Terminal className="w-4 h-4 text-slate-500" />
-            <h2 className="font-semibold text-slate-800">How to connect Claude</h2>
+        <div className="mb-6 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          {/* Tab header */}
+          <div className="flex border-b border-slate-100">
+            <button
+              onClick={() => setConnectTab("oauth")}
+              className={`flex items-center gap-2 px-5 py-3.5 text-sm font-semibold transition-colors ${
+                connectTab === "oauth"
+                  ? "text-violet-700 border-b-2 border-violet-600 bg-violet-50/50"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              <Zap className="w-4 h-4" />
+              OAuth (Recommended)
+            </button>
+            <button
+              onClick={() => setConnectTab("apikey")}
+              className={`flex items-center gap-2 px-5 py-3.5 text-sm font-semibold transition-colors ${
+                connectTab === "apikey"
+                  ? "text-violet-700 border-b-2 border-violet-600 bg-violet-50/50"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              <Key className="w-4 h-4" />
+              API Key (Manual)
+            </button>
           </div>
-          <ol className="text-sm text-slate-600 space-y-2 list-decimal list-inside">
-            <li>Generate an API key below</li>
-            <li>
-              In Claude, go to{" "}
-              <span className="font-medium text-slate-800">Settings → Integrations → Add Integration</span>
-            </li>
-            <li>
-              Paste this MCP Server URL:
-              <div className="mt-1 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 font-mono text-xs text-slate-700">
-                <span className="flex-1 break-all">{mcpEndpoint}</span>
-                <button
-                  onClick={() => handleCopy(mcpEndpoint)}
-                  className="text-slate-400 hover:text-slate-600 shrink-0"
-                  title="Copy URL"
-                >
-                  <Copy className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </li>
-            <li>Paste your API key when prompted and click Connect</li>
-          </ol>
-          <a
-            href="https://claude.ai/settings"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 mt-3 text-xs text-violet-600 hover:text-violet-800 font-medium"
-          >
-            Open Claude Settings <ExternalLink className="w-3 h-3" />
-          </a>
+
+          <div className="p-5">
+            {connectTab === "oauth" ? (
+              <>
+                <p className="text-sm text-slate-600 mb-4">
+                  Connect via OAuth — Claude redirects you to Eromify to log in. No copy-pasting required.
+                </p>
+                <ol className="text-sm text-slate-600 space-y-3 list-decimal list-inside mb-4">
+                  <li>
+                    In Claude, go to{" "}
+                    <span className="font-medium text-slate-800">Settings → Connectors → Add custom connector</span>
+                  </li>
+                  <li>
+                    Enter Name <code className="bg-slate-100 px-1 rounded">Eromify</code> and URL:
+                    <div className="mt-1 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 font-mono text-xs text-slate-700">
+                      <span className="flex-1 break-all">{mcpEndpoint}</span>
+                      <button onClick={() => handleCopy(mcpEndpoint)} className="text-slate-400 hover:text-slate-600 shrink-0">
+                        <Copy className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </li>
+                  <li>
+                    Expand <span className="font-medium text-slate-800">Advanced settings</span> and paste these credentials:
+                    <div className="mt-2 space-y-2">
+                      {/* Client ID */}
+                      <div>
+                        <p className="text-xs text-slate-500 mb-1">OAuth Client ID</p>
+                        <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 font-mono text-xs text-slate-700">
+                          <span className="flex-1 break-all">{OAUTH_CLIENT_ID}</span>
+                          <button onClick={() => handleCopy(OAUTH_CLIENT_ID)} className="text-slate-400 hover:text-slate-600 shrink-0">
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                      {/* Client Secret */}
+                      <div>
+                        <p className="text-xs text-slate-500 mb-1">OAuth Client Secret</p>
+                        <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 font-mono text-xs text-slate-700">
+                          <span className="flex-1 break-all">
+                            {oauthSecretVisible ? OAUTH_CLIENT_SECRET : "•".repeat(20) + OAUTH_CLIENT_SECRET.slice(-4)}
+                          </span>
+                          <button onClick={() => setOauthSecretVisible(v => !v)} className="text-slate-400 hover:text-slate-600 shrink-0">
+                            {oauthSecretVisible ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                          </button>
+                          <button onClick={() => handleCopy(OAUTH_CLIENT_SECRET)} className="text-slate-400 hover:text-slate-600 shrink-0">
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>Click <span className="font-medium text-slate-800">Add</span> → Claude redirects you to Eromify to approve the connection.</li>
+                  <li>After approving, Claude connects automatically. ✅</li>
+                </ol>
+                <div className="flex items-start gap-2 p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-700">
+                  <Shield className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                  <span>These OAuth credentials are shared for all Eromify users. Claude uses them to start the auth flow, then you log into <strong>your</strong> Eromify account — so tokens are always account-specific.</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-slate-600 mb-4">
+                  Generate an API key below and paste it manually into Claude when prompted.
+                </p>
+                <ol className="text-sm text-slate-600 space-y-2 list-decimal list-inside">
+                  <li>Generate an API key below</li>
+                  <li>In Claude, go to <span className="font-medium text-slate-800">Settings → Integrations → Add Integration</span></li>
+                  <li>
+                    Paste this MCP Server URL:
+                    <div className="mt-1 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 font-mono text-xs text-slate-700">
+                      <span className="flex-1 break-all">{mcpEndpoint}</span>
+                      <button onClick={() => handleCopy(mcpEndpoint)} className="text-slate-400 hover:text-slate-600 shrink-0">
+                        <Copy className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </li>
+                  <li>Paste your API key when prompted and click Connect</li>
+                </ol>
+              </>
+            )}
+
+            <a
+              href="https://claude.ai/settings"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 mt-4 text-xs text-violet-600 hover:text-violet-800 font-medium"
+            >
+              Open Claude Settings <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
         </div>
+
 
         {/* ── Active keys ── */}
         <div className="mb-6">
