@@ -60,7 +60,7 @@ function rpcError(
   id: string | number | null,
   code: number,
   message: string,
-  httpStatus = 200 // JSON-RPC errors are typically returned as 200 with error in body
+  httpStatus = 200
 ) {
   return NextResponse.json(
     { jsonrpc: "2.0", id, error: { code, message } },
@@ -69,6 +69,26 @@ function rpcError(
       headers: {
         "Content-Type":                "application/json",
         "Access-Control-Allow-Origin": "*",
+      },
+    }
+  );
+}
+
+// ── Helper: 401 with WWW-Authenticate header (MCP spec §Auth) ─────────────────
+// This is the CORRECT way to signal Bearer-token auth to Claude.
+// A JSON-RPC 401 is NOT enough — Claude needs the HTTP 401 + WWW-Authenticate
+// header to know it should prompt the user for an API key.
+
+function unauthorizedResponse(id: string | number | null) {
+  return NextResponse.json(
+    { jsonrpc: "2.0", id, error: { code: -32001, message: "Unauthorized: missing or invalid API key. Generate a key at eromify.in/mcp-keys." } },
+    {
+      status: 401,
+      headers: {
+        "Content-Type":                "application/json",
+        "Access-Control-Allow-Origin": "*",
+        // This header triggers Claude's "Enter API key" prompt
+        "WWW-Authenticate":            'Bearer realm="Eromify MCP", error="invalid_token"',
       },
     }
   );
@@ -155,21 +175,18 @@ export async function POST(request: NextRequest) {
     return rpcOk(id, { pong: true, ts: new Date().toISOString() });
   }
 
-  // ── Authenticate all other methods ────────────────────────────────────────
-
-  if (!PUBLIC_METHODS.has(method)) {
-    const authResult = await resolveMcpUser(request);
-    if (!authResult) {
-      return rpcError(id, -32001, "Unauthorized: missing or invalid API key. Generate a key at eromify.in/mcp-keys.", 401);
-    }
-
-    const { user } = authResult;
-    const userCtx = toUserContext(user);
-
-    // ── tools/list ────────────────────────────────────────────────────────
-
+    // ── tools/list — PUBLIC: no auth required ─────────────────────────────
+    // Claude calls this during discovery BEFORE the user adds auth.
+    // Gating it behind auth causes Claude to show "no tools available".
     if (method === "tools/list") {
       return rpcOk(id, { tools: ALL_TOOL_DEFINITIONS });
+    }
+
+    // ── Authenticate all other methods ────────────────────────────────────
+
+    const authResult = await resolveMcpUser(request);
+    if (!authResult) {
+      return unauthorizedResponse(id);
     }
 
     // ── tools/call ────────────────────────────────────────────────────────
