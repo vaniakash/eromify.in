@@ -18,12 +18,15 @@ export const OAUTH_CONFIG = {
   codeExpirySeconds:  5 * 60,          // Authorization codes: 5 minutes
   tokenExpirySeconds: 90 * 24 * 60 * 60, // Access tokens: 90 days
 
-  /** Allowed redirect URIs — Claude's callback URL pattern */
+  /** Allowed redirect URIs — Claude's callback URL patterns */
   allowedRedirectUriPrefixes: [
     "https://claude.ai/",
     "https://api.claude.ai/",
-    // Allow localhost for local Claude Desktop testing
+    "https://claude.anthropic.com/",
+    "https://api.anthropic.com/",
+    // Allow localhost for local Claude Desktop / dev testing
     "http://localhost:",
+    "https://localhost:",
   ],
 
   /** Supported scopes */

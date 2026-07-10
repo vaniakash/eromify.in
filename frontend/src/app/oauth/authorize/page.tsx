@@ -13,7 +13,7 @@ import { redirect }         from "next/navigation";
 import { OAUTH_CONFIG, isAllowedRedirectUri } from "@/lib/oauth-config";
 
 interface Props {
-  searchParams: {
+  searchParams: Promise<{
     client_id?:             string;
     redirect_uri?:          string;
     state?:                 string;
@@ -21,11 +21,14 @@ interface Props {
     code_challenge_method?: string;
     response_type?:         string;
     scope?:                 string;
-  };
+  }>;
 }
 
 export default async function OAuthAuthorizePage({ searchParams }: Props) {
   const session = await auth();
+
+  // In Next.js 15+, searchParams is a Promise — must be awaited
+  const params = await searchParams;
 
   const {
     client_id           = "",
@@ -34,7 +37,8 @@ export default async function OAuthAuthorizePage({ searchParams }: Props) {
     code_challenge      = "",
     code_challenge_method = "S256",
     scope               = "mcp",
-  } = searchParams;
+  } = params;
+
 
   // ── Validate params before doing anything ─────────────────────────────────
   if (client_id !== OAUTH_CONFIG.clientId) {
