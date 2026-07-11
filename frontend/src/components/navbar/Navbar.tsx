@@ -53,8 +53,13 @@ export function Navbar() {
 
   // Re-sync when another component fires credits_updated (e.g. after purchase)
   useEffect(() => {
+    // Listen to both event names — dispatchers use "eromify_credits_updated"
+    window.addEventListener("eromify_credits_updated", fetchCredits);
     window.addEventListener("credits_updated", fetchCredits);
-    return () => window.removeEventListener("credits_updated", fetchCredits);
+    return () => {
+      window.removeEventListener("eromify_credits_updated", fetchCredits);
+      window.removeEventListener("credits_updated", fetchCredits);
+    };
   }, [fetchCredits]);
 
   return (
