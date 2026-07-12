@@ -20,7 +20,7 @@ export async function GET() {
       authorization_endpoint: `${base}/oauth/authorize`,
       token_endpoint:         `${base}/api/oauth/token`,
       token_endpoint_auth_methods_supported: ["client_secret_post", "client_secret_basic"],
-      grant_types_supported:  ["authorization_code"],
+      grant_types_supported:  ["authorization_code", "refresh_token"],
       response_types_supported: ["code"],
       code_challenge_methods_supported: ["S256"],
       scopes_supported:       OAUTH_CONFIG.scopes,
@@ -30,7 +30,8 @@ export async function GET() {
       headers: {
         "Content-Type":                "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Cache-Control":               "public, max-age=3600",
+        // No CDN caching — Claude must always see the latest domain after deploys
+        "Cache-Control":               "no-store",
       },
     }
   );

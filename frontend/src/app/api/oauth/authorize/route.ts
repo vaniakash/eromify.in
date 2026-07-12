@@ -55,15 +55,13 @@ export async function POST(request: NextRequest) {
 
   // ── Find user ─────────────────────────────────────────────────────────────
   await connectDB();
-  const user = await User.findOne({ email: session.user.email }).select("_id mcpAccess").lean();
+  const user = await User.findOne({ email: session.user.email }).select("_id").lean();
   if (!user) {
     return redirect({ error: "server_error", error_description: "User not found" });
   }
 
-  // ── Check Pro gating ──────────────────────────────────────────────────────
-  if (!user.mcpAccess) {
-    return redirect({ error: "access_denied", error_description: "MCP access requires the Professional Pack" });
-  }
+  // Note: mcpAccess (Pro gate) is enforced at the MCP tool-call layer in /api/mcp/route.ts.
+  // Blocking here causes a silent access_denied that Claude shows as "Connection has expired".
 
   // ── Issue authorization code ──────────────────────────────────────────────
   const code      = randomBytes(32).toString("hex");

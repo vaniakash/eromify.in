@@ -14,6 +14,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID }                from "crypto";
 import { resolveMcpUser }            from "@/lib/mcp-auth";
 import { checkMcpRateLimit, rateLimitErrorMessage } from "@/lib/mcp-rate-limit";
 import {
@@ -145,15 +146,36 @@ export async function POST(request: NextRequest) {
   // ── Public methods (no auth) ──────────────────────────────────────────────
 
   if (method === "initialize") {
-    return rpcOk(id, {
-      protocolVersion: MCP_PROTOCOL_VERSION,
-      serverInfo:      SERVER_INFO,
-      capabilities:    { tools: { listChanged: false } },
-    });
+    const sessionId = randomUUID();
+    return NextResponse.json(
+      {
+        jsonrpc: "2.0",
+        id,
+        result: {
+          protocolVersion: MCP_PROTOCOL_VERSION,
+          serverInfo:      SERVER_INFO,
+          capabilities:    { tools: { listChanged: false } },
+        },
+      },
+      {
+        headers: {
+          "Content-Type":                "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Mcp-Session-Id":              sessionId,
+        },
+      }
+    );
   }
 
   if (method === "ping") {
     return rpcOk(id, { pong: true, ts: new Date().toISOString() });
+  }
+
+  // notifications/initialized — sent by Claude immediately after initialize.
+  // It is a notification (no response expected per spec), but Claude.ai checks
+  // the HTTP status code. Return an empty result to signal success.
+  if (method === "notifications/initialized") {
+    return rpcOk(id, {});
   }
 
   // tools/list is PUBLIC — Claude calls this during connector discovery BEFORE

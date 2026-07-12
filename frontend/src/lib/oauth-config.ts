@@ -7,6 +7,10 @@
  * All users use the SAME client_id/secret to set up the connector in Claude.
  * Each user authenticates with their own Eromify account during the OAuth flow,
  * so tokens are user-specific even though the OAuth app credentials are shared.
+ *
+ * IMPORTANT: NEXTAUTH_URL must be set to the Vercel primary domain (www.eromify.in).
+ * Using a non-www domain causes Vercel to issue a 308 redirect for POST requests to
+ * the token endpoint, which Claude's OAuth client cannot follow — breaking the flow.
  */
 
 export const OAUTH_CONFIG = {
@@ -15,8 +19,9 @@ export const OAUTH_CONFIG = {
   clientSecret: process.env.MCP_OAUTH_CLIENT_SECRET ?? "",
 
   /** Token lifetimes */
-  codeExpirySeconds:  5 * 60,          // Authorization codes: 5 minutes
-  tokenExpirySeconds: 90 * 24 * 60 * 60, // Access tokens: 90 days
+  codeExpirySeconds:         5 * 60,              // Authorization codes: 5 minutes
+  tokenExpirySeconds:        365 * 24 * 60 * 60,  // Access tokens: 1 year
+  refreshTokenExpirySeconds: 365 * 24 * 60 * 60,  // Refresh tokens: 1 year (same)
 
   /** Allowed redirect URIs — Claude's callback URL patterns */
   allowedRedirectUriPrefixes: [
@@ -40,7 +45,15 @@ export function isAllowedRedirectUri(uri: string): boolean {
   );
 }
 
-/** Returns the base URL (strips trailing slash) */
+/**
+ * Returns the canonical base URL for this deployment.
+ *
+ * MUST always return the Vercel primary domain (www.eromify.in) so that all
+ * OAuth discovery endpoints advertise URLs that Claude can reach without a
+ * 308 redirect. A 308 on a POST (token endpoint) causes Claude's OAuth client
+ * to drop the request body, silently aborting the token exchange.
+ */
 export function getBaseUrl(): string {
-  return (process.env.NEXTAUTH_URL ?? "https://eromify.in").replace(/\/$/, "");
+  const url = process.env.NEXTAUTH_URL ?? "https://www.eromify.in";
+  return url.replace(/\/$/, "");
 }
