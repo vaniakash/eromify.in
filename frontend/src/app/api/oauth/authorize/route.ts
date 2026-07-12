@@ -36,11 +36,15 @@ export async function POST(request: NextRequest) {
   }
 
   // Build redirect URL helper
+  // IMPORTANT: Use HTTP 302 (not Next.js default 307).
+  // 307 preserves the POST method — the browser would replay the form POST
+  // directly to Claude's callback URL, which only handles GET → "Method Not Allowed".
+  // 302 converts POST → GET, which is the correct OAuth redirect behavior.
   const redirect = (params: Record<string, string>) => {
     const url = new URL(redirectUri);
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
     if (state) url.searchParams.set("state", state);
-    return NextResponse.redirect(url.toString());
+    return NextResponse.redirect(url.toString(), 302);
   };
 
   // ── Denied ────────────────────────────────────────────────────────────────
